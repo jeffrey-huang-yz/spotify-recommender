@@ -1,0 +1,28 @@
+.song-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+  width: var(--song-card-width, 200px); /* Use CSS variable for width, default is 200px */
+  text-align: center;
+}
+
+.album-cover {
+  width: 150px; /* Make the album cover fill the container */
+  height: 150px; /* Maintain aspect ratio */
+  border-radius: 10px;
+}
+
+.buttons-container {
+  margin-top: 10px;
+}
+
+button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  background-color: #3498db;
+  color: #fff;
+}
