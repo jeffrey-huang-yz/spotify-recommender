@@ -4,6 +4,7 @@ import axios from 'axios';
 import SearchBar from '../SearchBar';
 import SongCard from '../../Songcard/SongCard'; // Import the SongCard component
 import './Home.scss';
+import PlaylistWrap from '../../wrapper/PlaylistWrap';
 function Home() {
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,7 +54,7 @@ function Home() {
 
   return (
     <div>
-      <h1>Home</h1>
+      
 
       {/* Include the SearchBar component */}
       <SearchBar onSearch={handleSearch} />
@@ -68,4 +69,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default PlaylistWrap(Home);

@@ -1,4 +1,12 @@
+/* home.scss */
+
 .song-cards-container {
     display: flex;
-    flex-wrap: wrap;
-}
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 8rem;
+    
+  }
+  
+ 

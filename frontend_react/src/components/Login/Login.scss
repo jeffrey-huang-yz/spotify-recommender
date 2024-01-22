@@ -1,0 +1,105 @@
+// Login.scss
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black; // Set the background color to black
+}
+
+.title {
+    color: white;
+    font-weight: 900;
+    font-size: 6em; // Increase the font size to make the text much larger
+    text-align: center; // Center the text on the screen
+    display: flex; // Align items and justify content center
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.purple-text {
+    color: #b702ff; // Set the text color to purple
+    margin-bottom: 20px;
+    animation: floating 3s ease-in-out infinite; // Add floating animation
+    margin-top: 2rem;
+}
+
+@keyframes floating {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.spotify-button {
+    color: white;
+    text-decoration: none;
+    background-color: #b702ff; // Use Spotify green color for the link background
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.5em;
+    transition: background-color 0.3s ease, transform 0.3s ease; // Add transform transition
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    max-width: 300px; // Set a maximum width for the button
+    margin: 0 auto; // Center the button horizontally
+    &:hover {
+        background-color: rgba(0, 255, 0, 0.65); // Darker green on hover
+        color: white;
+        transform: scale(1.1); // Grow the button on hover
+   
+        
+    }
+}
+
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 4em; // Decrease the font size for smaller screens
+    }
+    
+    a {
+        font-size: 1.2em; // Decrease the font size for smaller screens
+        max-width: 200px; // Decrease the maximum width for smaller screens
+    }
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 3em; // Decrease the font size for even smaller screens
+    }
+    
+    a {
+        font-size: 1em; // Decrease the font size for even smaller screens
+        max-width: 150px; // Decrease the maximum width for even smaller screens
+    }
+}
+
+p {
+    color: white;
+    margin-top: 4rem;
+    text-align: center;
+    margin-left: 3rem;
+    margin-right: 3rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+    .green-text{
+        color: rgb(0, 255, 0)
+    }
+    .purple-text{
+        color: #b702ff;
+
+    }
+
+    
+}
+

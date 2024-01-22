@@ -1,28 +1,82 @@
+/* SongCard.scss */
+
 .song-card {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 30px; /* Adjust the border-radius to make it more or less pill-shaped */
+  overflow: hidden;
+  border: 1px solid #ddd; /* Border color */
   margin: 10px;
-  width: var(--song-card-width, 200px); /* Use CSS variable for width, default is 200px */
-  text-align: center;
+  width: fit-content; /* Adjust width as needed */
+  max-width: 600px; /* Set the maximum width as needed */
+  max-height: 200px;
+  justify-content: center;
+  position: relative;
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+  }
+  margin-bottom: 1rem;
+  &:hover {
+    transform: scale(1.05);
+  }
+
 }
 
 .album-cover {
-  width: 150px; /* Make the album cover fill the container */
-  height: 150px; /* Maintain aspect ratio */
-  border-radius: 10px;
+  width: 100px; /* Adjust the width of the image as needed */
+  height: 100px; /* Adjust the height of the image as needed */
+  border-radius: 20px; /* Adjust the border-radius for the pill shape */
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  @media (min-width: 768px) {
+    
+  }
+}
+
+h3 {
+  margin: 0;
+  padding: 10px;
+  color: black;
+  font-weight: 700;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 400px;
+  font-size: smaller;
+  @media (min-width: 768px) {
+    text-align: left;
+    margin-right: 1rem; /* Add margin to separate names from buttons */
+  }
 }
 
 .buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
   margin-top: 10px;
+  margin-right: 2rem;
+  @media (min-width: 768px) {
+    margin-top: 0;
+  }
+  .play-button {
+    margin-right: 2rem;
+  }
 }
 
 button {
   padding: 5px 10px;
-  margin: 0 5px;
   cursor: pointer;
   border: none;
-  border-radius: 10px;
-  background-color: #3498db;
-  color: #fff;
+  border-radius: 5px;
+  background-color: #b702ff; /* Button color, adjust as needed */
+  color: #fff; /* Button text color, adjust as needed */
 }

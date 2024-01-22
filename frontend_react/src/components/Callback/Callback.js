@@ -2,8 +2,8 @@
 
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { exchangeCodeForAccessToken, verifyAccessToken } from '../utility/spotifyApi'; // Update the path
-
+import { exchangeCodeForAccessToken, verifyAccessToken } from '../../utility/spotifyApi'; // Update the path
+import './Callback.scss';
 const Callback = () => {
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const Callback = () => {
         // Redirect to the home page after successful login
         if (userData) {
           console.log('User data:', userData);
-          navigate('/');
+          navigate('/Home');
         }
       } catch (error) {
         console.error('Error handling Spotify callback:', error);
@@ -37,7 +37,7 @@ const Callback = () => {
 
   return (
     <div>
-      <h1>Processing Spotify Callback...</h1>
+      <h1 className='loading'>Processing Spotify Callback</h1>
     </div>
   );
 };

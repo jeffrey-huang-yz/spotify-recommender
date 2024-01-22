@@ -141,9 +141,6 @@ app.get('/recommendations/:trackId', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
 
 // Create Playlist
 app.post('/create-playlist', async (req, res) => {
@@ -177,3 +174,26 @@ app.post('/add-tracks-to-playlist/:playlistId', async (req, res) => {
   }
 });
 
+
+// Add Tracks to Playlist
+app.post('/user-playlists', async (req, res) => {
+  try {
+    const response = await spotifyApi.getUserPlaylists();
+    const playlists = response.body.items.map(item => ({
+      name: item.name,
+      id: item.id,
+      image:item.images[0].url,
+    }));
+    res.json(playlists);
+  } catch (error) {
+    console.error('Error getting playlists:', error);
+    res.status(500).send('Error getting playlists');
+  }
+});
+
+
+// Start the server
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

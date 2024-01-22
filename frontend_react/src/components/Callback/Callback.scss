@@ -1,0 +1,50 @@
+h1 {
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    justify-self: center;
+
+    @media screen and (max-width: 768px) {
+        /* Adjustments for smaller screens */
+        font-size: 24px;
+    }
+}
+
+.loading {
+    font-size: 50px;
+    margin-top: 16rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    color: white;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    @media screen and (max-width: 768px) {
+        /* Adjustments for smaller screens */
+        font-size: 20px;
+        margin-top: 8rem;
+    }
+}
+
+.loading:after {
+    overflow: hidden;
+    -webkit-animation: ellipsis steps(4,end) 2s infinite;      
+    animation: ellipsis steps(4,end) 2s infinite;
+    content: "\2026"; /* ascii code for the ellipsis character */
+    width: 0px;
+}
+
+@keyframes ellipsis {
+    to {
+        width: 1.25em;    
+    }
+}
+
+@-webkit-keyframes ellipsis {
+    to {
+        width: 1.25em;    
+    }
+}
