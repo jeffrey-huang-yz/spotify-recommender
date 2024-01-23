@@ -27,7 +27,8 @@ app.get('/login', (req, res) => {
       'user-read-email',
       'user-read-recently-played',
       'playlist-read-private',    
-      'playlist-modify-private',     
+      'playlist-modify-private',  
+      'user-modify-playback-state',
     ]);
   res.redirect(authorizeURL);
 });
@@ -83,6 +84,7 @@ app.get('/recently-played', async (req, res) => {
       return {
         id: item.track.uri,
         name: item.track.name,
+        uri: item.track.uri,
         album: {
           name: item.album && item.album.name,
           // Directly access the first image URL
@@ -191,6 +193,21 @@ app.post('/user-playlists', async (req, res) => {
   }
 });
 
+app.put('/play', async (req, res) => {
+  const { trackUri } = req.body;
+
+  try {
+    // Start playback for the specified track
+    const response = await spotifyApi.play({
+      uris: [`${trackUri}`],
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error starting playback:', error);
+    res.json({ success: false, error: 'Error starting playback' });
+  }
+});
 
 // Start the server
 const PORT = process.env.PORT || 3001;

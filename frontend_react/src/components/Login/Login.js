@@ -41,7 +41,7 @@ const Login = () => {
       </h1>
       <a href="http://localhost:3001/login" className="spotify-button">Log in with Spotify</a>
       <p>
-      Welcome to <span className='purple-text'>disk</span>overy! This website helps you discover new music based on your specific preferences. <br></br>Log in with your <span className='green-text'> Spotify account</span> to get started so you can add music to playlists in real time.
+      Welcome to diskovery! This website helps you discover new music based on your specific preferences. <br></br>Log in with your <span className='green-text'> Spotify account</span> to get started so you can add music to playlists in real time.
       </p>
     </div>
     );

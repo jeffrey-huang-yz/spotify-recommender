@@ -1,10 +1,23 @@
 import React from 'react';
 import './SongCard.scss';
+import axios from 'axios';
+
 const SongCard = ({ song }) => {
 
-  const handlePlay = () => {
-    // Implement play functionality here
-    console.log(`Playing: ${song.name} by ${song.artist}`);
+  const handlePlay = async () => {
+    try {
+      // Call the /play route on your server
+      const response = await axios.put('http://localhost:3001/play', { trackUri: song.uri});
+
+      const data = response.data;
+      if (data.success) {
+        console.log(`Playing: ${song.name} by ${song.artist}`);
+      } else {
+        console.error('Error starting playback:', data.error);
+      }
+    } catch (error) {
+      console.error('Error starting playback:', error);
+    }
   };
 
   const handleAddToPlaylist = () => {

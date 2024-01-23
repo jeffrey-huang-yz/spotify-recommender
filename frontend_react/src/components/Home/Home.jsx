@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import SearchBar from '../SearchBar';
-import SongCard from '../../Songcard/SongCard'; // Import the SongCard component
+import SearchBar from '../SearchBar/SearchBar';
+import SongCard from '../../Songcard/SongCard';
 import './Home.scss';
 import PlaylistWrap from '../../wrapper/PlaylistWrap';
+
 function Home() {
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,13 +55,17 @@ function Home() {
 
   return (
     <div>
-      
+      {/* Discovery Section */}
+      <div className="discovery-section">
+        <h1>Discovery</h1>
+      </div>
 
       {/* Include the SearchBar component */}
       <SearchBar onSearch={handleSearch} />
 
-      <h2>Recently Played Tracks</h2>
+      {/* Recently Played Tracks Section */}
       <div className="song-cards-container">
+        <h2>Recently Played Tracks</h2>
         {uniqueRecentlyPlayedTracks.map((track, index) => (
           <SongCard key={index} song={track} />
         ))}

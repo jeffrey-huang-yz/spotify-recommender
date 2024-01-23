@@ -10,33 +10,37 @@
   border: 1px solid #ddd; /* Border color */
   margin: 10px;
   width: fit-content; /* Adjust width as needed */
-  max-width: 600px; /* Set the maximum width as needed */
+  max-width: 1000px; /* Set the maximum width as needed */
   max-height: 200px;
   justify-content: center;
   position: relative;
+  margin-bottom: 1rem;
+  &:hover {
+    transform: scale(1.04);
+    transition: transform 0.3s ease-in;
+    box-shadow: #b702ff 0px 0px 11px 0px;
+  }
+
   @media (min-width: 768px) {
     flex-direction: row;
     align-items: center;
     width: auto;
   }
-  margin-bottom: 1rem;
-  &:hover {
-    transform: scale(1.05);
-  }
 
+  @media (max-width: 767px) {
+    max-height: 300px; /* Increase the maximum height for mobile devices */
+    text-align: center;
+    flex: auto;
+    
+  }
 }
 
 .album-cover {
-  width: 100px; /* Adjust the width of the image as needed */
-  height: 100px; /* Adjust the height of the image as needed */
-  border-radius: 20px; /* Adjust the border-radius for the pill shape */
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  @media (min-width: 768px) {
-    
-  }
+  width: 50px; /* Adjust the width of the image as needed */
+  height: 50px; /* Adjust the height of the image as needed */
+  border-radius: 10px; /* Adjust the border-radius for the pill shape */
+  margin: 1rem;
+  box-shadow: 0px 0px 8px 0px black;
 }
 
 h3 {
@@ -46,37 +50,51 @@ h3 {
   font-weight: 700;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 400px;
+  width: 100%;
   font-size: smaller;
+  text-align: center;
+  margin-left: 2rem;
   @media (min-width: 768px) {
-    text-align: left;
+    text-align: start;
     margin-right: 1rem; /* Add margin to separate names from buttons */
+    width: 700px;
   }
 }
 
 .buttons-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   width: 100%;
   margin-top: 10px;
   margin-right: 2rem;
   @media (min-width: 768px) {
+    justify-content: flex-end;
     margin-top: 0;
+    margin-right: 2rem; /* Adjust the margin to move buttons away from the edge */
   }
   .play-button {
     margin-right: 2rem;
   }
+  @media screen and (max-width: 768px) {
+    justify-items: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
 }
 
 button {
-  padding: 5px 10px;
+  padding: 7px 15px;
   cursor: pointer;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   background-color: #b702ff; /* Button color, adjust as needed */
   color: #fff; /* Button text color, adjust as needed */
+  
+  @media screen and (max-width: 768px) {
+    justify-items: center;
+    align-items: center;
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+  }
 }
