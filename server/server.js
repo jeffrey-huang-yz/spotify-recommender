@@ -29,6 +29,7 @@ app.get('/login', (req, res) => {
       'playlist-read-private',    
       'playlist-modify-private',  
       'user-modify-playback-state',
+      'playlist-modify-public',
     ]);
   res.redirect(authorizeURL);
 });
@@ -151,7 +152,6 @@ app.post('/create-playlist', async (req, res) => {
   try {
     // Create a new playlist
     const response = await spotifyApi.createPlaylist(name, { public: false });
-
     // Return the playlist ID
     res.json({ id: response.body.id });
   } catch (error) {
@@ -161,15 +161,16 @@ app.post('/create-playlist', async (req, res) => {
 });
 
 // Add Tracks to Playlist
-app.post('/add-tracks-to-playlist/:playlistId', async (req, res) => {
-  const { playlistId } = req.params;
-  const { tracks } = req.body;
-
+app.post('/add-tracks-to-playlist', async (req, res) => {
+  
+  const { playlist_id } = req.body;
+  const { uris } = req.body;
+  console.log(req.body);
   try {
     // Add tracks to the playlist
-    await spotifyApi.addTracksToPlaylist(playlistId, tracks);
+    await spotifyApi.addTracksToPlaylist(playlist_id, [uris], { position: 0 });
 
-    res.status(200).send('Tracks added to playlist successfully');
+    res.status(200).send('Track added to playlist successfully');
   } catch (error) {
     console.error('Error adding tracks to playlist:', error);
     res.status(500).send('Error adding tracks to playlist');
@@ -178,13 +179,14 @@ app.post('/add-tracks-to-playlist/:playlistId', async (req, res) => {
 
 
 // Add Tracks to Playlist
-app.post('/user-playlists', async (req, res) => {
+app.get('/user-playlists', async (req, res) => {
   try {
     const response = await spotifyApi.getUserPlaylists();
     const playlists = response.body.items.map(item => ({
       name: item.name,
       id: item.id,
-      image:item.images[0].url,
+      owner: item.owner,
+      image: item.images[0].url,
     }));
     res.json(playlists);
   } catch (error) {
@@ -208,6 +210,25 @@ app.put('/play', async (req, res) => {
     res.json({ success: false, error: 'Error starting playback' });
   }
 });
+
+
+
+app.get('/user', async (req, res) => {
+  try {
+    const response = await spotifyApi.getMe();
+    const user = {
+      name: response.body.display_name,
+      id: response.body.id,
+      image: response.body.images.length > 0 ? response.body.images[0].url : null,
+    };
+    res.json(user);
+  } catch (error) {
+    console.error('Error getting user data:', error);
+    res.status(500).send('Error getting user data');
+  }
+});
+
+
 
 // Start the server
 const PORT = process.env.PORT || 3001;

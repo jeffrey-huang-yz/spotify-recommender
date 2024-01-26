@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './SongCard.scss';
 import axios from 'axios';
 
-const SongCard = ({ song }) => {
-
+const SongCard = ({ song, selectedPlaylistId }) => {
+  useEffect(() => {
+    // This block will run whenever selectedPlaylist changes
+    console.log('Selected playlist changed, re-rendering SongCard:', selectedPlaylistId);
+  }, [selectedPlaylistId]);
   const handlePlay = async () => {
     try {
-      // Call the /play route on your server
-      const response = await axios.put('http://localhost:3001/play', { trackUri: song.uri});
+      // Call the /play route on your server with the selectedPlaylistId
+      const response = await axios.put('http://localhost:3001/play', {
+        trackUri: song.uri
+      });
 
       const data = response.data;
       if (data.success) {
@@ -20,12 +25,23 @@ const SongCard = ({ song }) => {
     }
   };
 
-  const handleAddToPlaylist = () => {
-    // Implement add to playlist functionality here
-    console.log(`Adding to Playlist: ${song.name} by ${song.artist}`);
+  const handleAddToPlaylist = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/add-tracks-to-playlist', {
+        playlist_id: selectedPlaylistId,
+        uris: song.uri
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error adding tracks to playlist:', error.message);
+    }
   };
 
-  
   return (
     <div className="song-card">
       {/* Use 'albumImage' as the source for the 'img' tag */}
@@ -33,13 +49,15 @@ const SongCard = ({ song }) => {
         alt={song.name}
         className="album-cover"
         src={song.album.albumArt}
-         // Adjust the width and height as needed
+        // Adjust the width and height as needed
       />
       <h3>{song.name}</h3>
       <h3>{song.artist}</h3>
       <div className="buttons-container">
-        <button className="play-button" onClick={handlePlay}>Play</button>
-        <button className="add-button">Add to Playlist</button>
+        <button className="play-button" onClick={handlePlay}>
+          Play
+        </button>
+        <button className="add-button" onClick={handleAddToPlaylist}>Add to Playlist</button>
       </div>
     </div>
   );

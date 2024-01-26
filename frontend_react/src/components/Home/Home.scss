@@ -32,3 +32,43 @@
    
 }
 
+.searchbar{
+  display: flex;
+  align-items: center;
+  justify-content: center; // Center horizontally
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto; // Center the container horizontally
+  margin-bottom: 20rem;
+}
+
+.home-title {
+  color: white;
+  font-weight: 900;
+  font-size: 6em; // Increase the font size to make the text much larger
+  text-align: center; // Center the text on the screen
+  display: flex; // Align items and justify content center
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+
+  .home-purple {
+    color: #b702ff; // Set the text color to purple
+    margin-bottom: 20px;
+    animation: home-floating 3s ease-in-out infinite; // Add floating animation
+    margin-top: 2rem;
+  }
+
+  @keyframes home-floating {
+    0% {
+        transform: translateY(-24px);
+    }
+    50% {
+        transform: translateY(-40px);
+    }
+    100% {
+        transform: translateY(-24px);
+    }
+}
+
+}

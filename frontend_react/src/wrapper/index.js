@@ -1,3 +1,5 @@
-import PlaylistWrap from './PlaylistWrap.jsx';
+import AppWrap from './AppWrap';
 
-export {PlaylistWrap};
+export {
+  AppWrap
+};

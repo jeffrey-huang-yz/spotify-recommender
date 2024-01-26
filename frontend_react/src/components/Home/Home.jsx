@@ -4,9 +4,9 @@ import axios from 'axios';
 import SearchBar from '../SearchBar/SearchBar';
 import SongCard from '../../Songcard/SongCard';
 import './Home.scss';
-import PlaylistWrap from '../../wrapper/PlaylistWrap';
+import {AppWrap} from '../../wrapper';
 
-function Home() {
+function Home({ selectedPlaylistId }) {
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -56,22 +56,33 @@ function Home() {
   return (
     <div>
       {/* Discovery Section */}
-      <div className="discovery-section">
-        <h1>Discovery</h1>
+      <div className="home-title">
+        <h1>
+          <span className="home-purple">disk</span>overy
+        </h1>
       </div>
-
-      {/* Include the SearchBar component */}
+      
+      <div className='searchbar'>
+        {/* Include the SearchBar component */}
       <SearchBar onSearch={handleSearch} />
 
+      </div>
+      
       {/* Recently Played Tracks Section */}
       <div className="song-cards-container">
-        <h2>Recently Played Tracks</h2>
+        <div className='recent-text'>
+          <h2>Recently Played Tracks</h2>
+        </div>
+        
+        <div className='songcards'>
         {uniqueRecentlyPlayedTracks.map((track, index) => (
-          <SongCard key={index} song={track} />
+          <SongCard key={index} song={track} selectedPlaylistId={selectedPlaylistId}/>
         ))}
+        </div>
+        
       </div>
     </div>
   );
 }
 
-export default PlaylistWrap(Home);
+export default AppWrap(Home);

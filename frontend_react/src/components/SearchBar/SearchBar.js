@@ -1,7 +1,7 @@
 // SearchBar.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import './SearchBar.scss';
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -12,9 +12,10 @@ const SearchBar = () => {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search for tracks"
+        className='search-bar-input'
       />
       <Link to={`/search/${searchQuery}`}>
-        <button>Search</button>
+        <button className='search'>Search</button>
       </Link>
     </div>
   );

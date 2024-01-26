@@ -1,0 +1,52 @@
+/* Add these styles to your CSS */
+.playlist-selector {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .choose-playlist {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #b702ff; /* Button color, adjust as needed */
+    color: #fff; /* Button text color, adjust as needed */
+    border-radius: 5px;
+    margin: 0;
+    transition: background-color 0.3s ease;
+  }
+  
+  .playlist-list {
+    color: black;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 50px; /* Adjust as needed */
+    left: 0;
+    width: 200px; /* Adjust as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    display: none;
+  }
+  
+  .playlist-selector.open ul {
+    display: block;
+  }
+  
+  .playlist-selector li {
+    padding: 10px;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .playlist-selector li:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .playlist-selector .selected {
+    background-color: #3498db;
+    color: #fff;
+  }
+  
