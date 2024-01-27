@@ -1,8 +1,12 @@
 import React, { useEffect } from 'react';
 import './SongCard.scss';
 import axios from 'axios';
+import useNotification from '../Notification/useNotification';
+import NotificationBox from '../Notification/NotificationBox';
 
-const SongCard = ({ song, selectedPlaylistId }) => {
+const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName }) => {
+  const { visible, text, showNotification } = useNotification();
+  
   useEffect(() => {
     // This block will run whenever selectedPlaylist changes
     console.log('Selected playlist changed, re-rendering SongCard:', selectedPlaylistId);
@@ -37,13 +41,18 @@ const SongCard = ({ song, selectedPlaylistId }) => {
       });
   
       console.log(response.data);
+      showNotification(`${song.name} was added to: ${selectedPlaylistName}`, 3000);  
     } catch (error) {
       console.error('Error adding tracks to playlist:', error.message);
     }
   };
 
+  const handleContainerClick = async () => {
+
+  };
+
   return (
-    <div className="song-card">
+    <div className="song-card" onClick={handleContainerClick}>
       {/* Use 'albumImage' as the source for the 'img' tag */}
       <img
         alt={song.name}
@@ -58,7 +67,9 @@ const SongCard = ({ song, selectedPlaylistId }) => {
           Play
         </button>
         <button className="add-button" onClick={handleAddToPlaylist}>Add to Playlist</button>
+
       </div>
+      <NotificationBox visible={visible} text={text} />
     </div>
   );
 };

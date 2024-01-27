@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import SearchBar from '../SearchBar/SearchBar';
 import SongCard from '../../Songcard/SongCard';
 import './Home.scss';
-import {AppWrap} from '../../wrapper';
+import { AppWrap } from '../../wrapper';
 
-function Home({ selectedPlaylistId }) {
+function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
+  const [searchResults, setSearchResults] = useState([]); // State to store search results
 
   useEffect(() => {
     const fetchRecentlyPlayedTracks = async () => {
@@ -24,34 +22,26 @@ function Home({ selectedPlaylistId }) {
     fetchRecentlyPlayedTracks();
   }, []);
 
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3001/search/${searchQuery}`);
-      setRecentlyPlayedTracks(response.data);
-      // Redirect to search results page
-      navigate(`/search/${searchQuery}`);
-    } catch (error) {
-      console.error('Error searching tracks:', error);
-    }
+  const handleSearch = async (searchData) => {
+    setSearchResults(searchData);
   };
 
-  // Function to filter out duplicate songs based on their ID
+    // Function to filter out duplicate songs based on their ID
   const filterUniqueSongs = (tracks) => {
     const uniqueSongs = [];
     const seenIds = new Set();
-
     for (const track of tracks) {
       if (!seenIds.has(track.id)) {
         uniqueSongs.push(track);
         seenIds.add(track.id);
       }
     }
-
     return uniqueSongs;
   };
 
   // Filter out duplicate songs
   const uniqueRecentlyPlayedTracks = filterUniqueSongs(recentlyPlayedTracks);
+
 
   return (
     <div>
@@ -61,26 +51,42 @@ function Home({ selectedPlaylistId }) {
           <span className="home-purple">disk</span>overy
         </h1>
       </div>
-      
+
       <div className='searchbar'>
         {/* Include the SearchBar component */}
-      <SearchBar onSearch={handleSearch} />
-
+        <SearchBar onSearch={handleSearch} />
       </div>
-      
+
+      <div className='song-cards-container'>
+        {/* Display search results if available */}
+        <div className="search-results">
+          <h2>Search Results</h2>
+        {searchResults.length > 0 && (
+    
+            <div className='songcards'>
+              {searchResults.map((track, index) => (
+                <SongCard key={index} song={track} selectedPlaylistId={selectedPlaylistId} selectedPlaylistName={selectedPlaylistName}/>
+              ))}
+            </div>
+          
+        )}
+        </div>
+      </div>
+
       {/* Recently Played Tracks Section */}
       <div className="song-cards-container">
-        <div className='recent-text'>
+        <div className='recently-played'>
           <h2>Recently Played Tracks</h2>
+
+          <div className='songcards'>
+          {uniqueRecentlyPlayedTracks.map((track, index) => (
+            <SongCard key={index} song={track} selectedPlaylistId={selectedPlaylistId} selectedPlaylistName={selectedPlaylistName}/>
+          ))}
         </div>
-        
-        <div className='songcards'>
-        {uniqueRecentlyPlayedTracks.map((track, index) => (
-          <SongCard key={index} song={track} selectedPlaylistId={selectedPlaylistId}/>
-        ))}
-        </div>
-        
       </div>
+        
+
+    </div>
     </div>
   );
 }
