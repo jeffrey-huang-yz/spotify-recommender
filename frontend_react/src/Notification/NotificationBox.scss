@@ -1,0 +1,17 @@
+.notification {
+  /* z-index to show it on top of other elements if you have other modals. */
+  z-index: 100;
+  background-color: #b702ff;
+  display: flex;
+  align-items: center;
+  border-radius: 30px; /* Adjust the border-radius to make it more or less pill-shaped */
+  overflow: hidden;
+  border: 1px solid #ddd; /* Border color */
+  width: 100%; /* Set the width to 100% to overlap the entire parent container */
+  height: 100%;
+  position: absolute; /* Use absolute positioning to overlap the song card */
+  text-align: center;
+  justify-content: center;
+  color: #ddd;
+  font-weight: 700;
+}

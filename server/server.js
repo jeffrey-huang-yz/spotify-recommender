@@ -114,10 +114,14 @@ app.get('/search/:query', async (req, res) => {
     const response = await spotifyApi.searchTracks(query);
     const tracks = response.body.tracks.items.map(item => ({
       id: item.id,
+      uri:item.uri,
       name: item.name,
-      album: item.album,
+      album: {
+        albumArt: item.album.images[0].url,
+      },
       artist: item.artists.map(artist => artist.name).join(', '),
     }));
+    console.log(tracks);
     res.json(tracks);
   } catch (error) {
     console.error('Error searching tracks:', error);
@@ -186,7 +190,6 @@ app.get('/user-playlists', async (req, res) => {
       name: item.name,
       id: item.id,
       owner: item.owner,
-      image: item.images[0].url,
     }));
     res.json(playlists);
   } catch (error) {
