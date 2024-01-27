@@ -2,6 +2,7 @@
 .playlist-selector {
     position: relative;
     display: inline-block;
+    position: fixed;
   }
   
   .choose-playlist {
@@ -12,6 +13,9 @@
     border-radius: 5px;
     margin: 0;
     transition: background-color 0.3s ease;
+    width: 180px;
+    margin-top: 1rem;
+    margin-left: 2rem;
   }
   
   .playlist-list {
@@ -23,10 +27,12 @@
     top: 50px; /* Adjust as needed */
     left: 0;
     width: 200px; /* Adjust as needed */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     overflow: hidden;
     display: none;
+    margin-top: 2rem;
+    margin-left: 2rem;
   }
   
   .playlist-selector.open ul {
@@ -42,11 +48,11 @@
   }
   
   .playlist-selector li:hover {
-    background-color: #f5f5f5;
+    background-color: #cccccc;
   }
   
   .playlist-selector .selected {
-    background-color: #3498db;
+    background-color: #b702ff;
     color: #fff;
   }
   

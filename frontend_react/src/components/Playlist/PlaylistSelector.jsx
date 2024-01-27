@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './PlaylistSelector.scss';
+
 const PlaylistSelector = ({ onSelect }) => {
   const [playlists, setPlaylists] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const [selectedPlaylistName, setSelectedPlaylistName] = useState('');
 
   useEffect(() => {
     // Fetch user's playlists from your server or Spotify API
@@ -16,7 +18,7 @@ const PlaylistSelector = ({ onSelect }) => {
         const userOwnedPlaylists = response.data.filter((playlist) => {
           return playlist.owner.id === userResponse.data.id;
         });
-    
+
         setPlaylists(userOwnedPlaylists);
       } catch (error) {
         console.error('Error fetching playlists:', error);
@@ -28,6 +30,7 @@ const PlaylistSelector = ({ onSelect }) => {
 
   const handlePlaylistSelect = (playlist) => {
     setSelectedPlaylist(playlist);
+    setSelectedPlaylistName(playlist.name); // Update selected playlist name
     onSelect(playlist); // Callback to parent component with the selected playlist
     closeMenu();
   };
@@ -42,7 +45,7 @@ const PlaylistSelector = ({ onSelect }) => {
 
   return (
     <div className={`playlist-selector ${isMenuOpen ? 'open' : ''}`}>
-      <h3 className= 'choose-playlist' onClick={toggleMenu}>Choose Playlist:</h3>
+      <h3 className='choose-playlist' onClick={toggleMenu}>{selectedPlaylistName || 'Choose Playlist:'}</h3>
       <ul className='playlist-list'>
         {playlists.map((playlist) => (
           <li

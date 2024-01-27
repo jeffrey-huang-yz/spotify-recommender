@@ -1,12 +1,12 @@
-// SearchBar.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './SearchBar.scss';
+
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div>
+    <div className="search-bar-container">
       <input
         type="text"
         value={searchQuery}

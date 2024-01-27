@@ -12,8 +12,12 @@ const AppWrap = (Component, idName, classNames) => function HOC() {
   return (
     <div id={idName} className={`app__container ${classNames}`}>
       <div className="app__wrapper app__flex">
-        {/* Pass selectedPlaylistId as a prop to the wrapped component */}
-        <Component selectedPlaylistId={selectedPlaylistId} />
+
+        {/* Pass handleSelectedPlaylist as a prop to PlaylistSelector */}
+      <PlaylistSelector onSelect={handleSelectedPlaylist} />
+
+      {/* Pass selectedPlaylistId as a prop to the wrapped component */}
+      <Component selectedPlaylistId={selectedPlaylistId} />
 
         <div className="copyright">
           <p className="p-text"> @2024 Jeffrey</p>
@@ -21,8 +25,7 @@ const AppWrap = (Component, idName, classNames) => function HOC() {
         </div>
       </div>
 
-      {/* Pass handleSelectedPlaylist as a prop to PlaylistSelector */}
-      <PlaylistSelector onSelect={handleSelectedPlaylist} />
+    
     </div>
   );
 };
