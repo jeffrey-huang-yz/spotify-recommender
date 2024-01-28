@@ -4,10 +4,17 @@ import SearchBar from '../SearchBar/SearchBar';
 import SongCard from '../../Songcard/SongCard';
 import './Home.scss';
 import { AppWrap } from '../../wrapper';
+import useNotification from '../../NotificationHome/useNotification';
+import NotificationBox from '../../NotificationHome/NotificationBox';
 
 function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
+  const { visible, text, showNotification } = useNotification();
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = useState([]);
   const [searchResults, setSearchResults] = useState([]); // State to store search results
+  
+  const handleSearchPerformed = () => {
+    showNotification(`Successful search! The results will be found in the search results box.`, 3000);  
+  };
 
   useEffect(() => {
     const fetchRecentlyPlayedTracks = async () => {
@@ -51,10 +58,10 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
           <span className="home-purple">disk</span>overy
         </h1>
       </div>
-
+      <NotificationBox visible={visible} text={text} />
       <div className='searchbar'>
         {/* Include the SearchBar component */}
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} onSearchPerformed={handleSearchPerformed}/>
       </div>
 
       <div className='song-cards-container'>

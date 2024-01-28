@@ -3,20 +3,24 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './SearchBar.scss';
 
-<<<<<<< HEAD
-const SearchBar = () => {
-=======
-const SearchBar = ({ onSearch }) => {
->>>>>>> 432bb78fb1a55d7b6486c0813c55fbb4e579d420
+const SearchBar = ({ onSearch, onSearchPerformed }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const handleSearch = async () => {
     try {
       const response = await axios.get(`http://localhost:3001/search/${searchQuery}`);
       onSearch(response.data); // Pass the search results to the parent component
+      onSearchPerformed(); // Invoke the callback to notify home.jsx of the search
     } catch (error) {
       console.error('Error searching tracks:', error);
       // You can handle the error as needed
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && isInputFocused) {
+      handleSearch();
     }
   };
 
@@ -28,6 +32,9 @@ const SearchBar = ({ onSearch }) => {
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search for tracks"
         className='search-bar-input'
+        onKeyDown={handleKeyDown}
+        onFocus={() => setIsInputFocused(true)}
+        onBlur={() => setIsInputFocused(false)}
       />
       <button className='search' onClick={handleSearch}>
         Search

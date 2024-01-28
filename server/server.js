@@ -103,7 +103,21 @@ app.get('/recently-played', async (req, res) => {
   }
 });
 
+app.get('/playlist-details/:selectedPlaylistId', async (req, res) => {
+  const { selectedPlaylistId } = req.params;
 
+  try {
+    // Fetch playlist details based on the ID
+    const response = await spotifyApi.getPlaylist(selectedPlaylistId);
+    const tracks = response.body.tracks.items;
+    // Respond with the playlist details
+    res.json(tracks);
+    console.log(tracks);
+  } catch (error) {
+    console.error('Error fetching playlist details:', error);
+    res.status(500).send('Error fetching playlist details');
+  }
+});
 
 
 

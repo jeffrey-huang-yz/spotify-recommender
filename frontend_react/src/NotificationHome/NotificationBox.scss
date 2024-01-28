@@ -1,0 +1,19 @@
+.home-notification {
+  /* z-index to show it on top of other elements if you have other modals. */
+  z-index: 100;
+  background-color: #b702ff;
+  display: flex;
+  border-radius: 10px; /* Adjust the border-radius to make it more or less pill-shaped */
+  overflow: hidden;
+  position: fixed; 
+  text-align: center;
+  color: #ddd;
+  max-width: 200px;
+  max-height: 100px;
+  font-weight: 700;
+  padding: 1rem;
+  bottom: 0;
+  left: 0;
+  margin-left: 1rem;
+  margin-bottom: 2rem;
+}

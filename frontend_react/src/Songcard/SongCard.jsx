@@ -11,6 +11,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName }) => {
     // This block will run whenever selectedPlaylist changes
     console.log('Selected playlist changed, re-rendering SongCard:', selectedPlaylistId);
   }, [selectedPlaylistId]);
+  
   const handlePlay = async () => {
     try {
       // Call the /play route on your server with the selectedPlaylistId
@@ -22,30 +23,47 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName }) => {
       if (data.success) {
         console.log(`Playing: ${song.name} by ${song.artist}`);
       } else {
+        showNotification(`No active device detected, please play spotify on a device. `, 3000);  
         console.error('Error starting playback:', data.error);
       }
     } catch (error) {
       console.error('Error starting playback:', error);
     }
   };
-
   const handleAddToPlaylist = async () => {
-    try {
-      const response = await axios.post('http://localhost:3001/add-tracks-to-playlist', {
-        playlist_id: selectedPlaylistId,
-        uris: song.uri
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      console.log(response.data);
-      showNotification(`${song.name} was added to: ${selectedPlaylistName}`, 3000);  
-    } catch (error) {
-      console.error('Error adding tracks to playlist:', error.message);
+  try {
+    // Check if the song is already in the playlist
+    const playlistDetailsResponse = await axios.get(`http://localhost:3001/playlist-details/${selectedPlaylistId}`);
+    const playlistTracks = playlistDetailsResponse.data;
+    const isSongInPlaylist = playlistTracks.some(items => items.track.uri === song.id);
+
+
+    if (isSongInPlaylist) {
+      showNotification(`This song is already in ${selectedPlaylistName}`, 3000);  
+      // Handle the case where the song is already in the playlist
+      console.log(`Song ${song.name} is already in the playlist`);
+      // You can show a notification or handle it in any way you prefer
+    } else {
+      
+        const response = await axios.post('http://localhost:3001/add-tracks-to-playlist', {
+          playlist_id: selectedPlaylistId,
+          uris: song.uri
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+    
+        console.log(response.data);
+        showNotification(`${song.name} was added to: ${selectedPlaylistName}`, 3000);  
+    
     }
-  };
+  } catch (error) {
+    console.error('Error adding tracks to playlist:', error);
+    // You can show an error notification or handle it in any way you prefer
+  }
+};
+
 
   const handleContainerClick = async () => {
 
