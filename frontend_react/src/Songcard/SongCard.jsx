@@ -4,7 +4,7 @@ import axios from 'axios';
 import useNotification from '../Notification/useNotification';
 import NotificationBox from '../Notification/NotificationBox';
 
-const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName }) => {
+const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongCardClick, isSelected }) => {
   const { visible, text, showNotification } = useNotification();
   
   useEffect(() => {
@@ -66,7 +66,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName }) => {
 
 
   const handleContainerClick = async () => {
-
+    onSongCardClick(song.id, isSelected);
   };
 
   return (
@@ -80,7 +80,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName }) => {
       />
       <h3>{song.name}</h3>
       <h3>{song.artist}</h3>
-      <div className="buttons-container">
+      <div className="buttons-container" onClick={handleContainerClick}>
         <button className="play-button" onClick={handlePlay}>
           Play
         </button>

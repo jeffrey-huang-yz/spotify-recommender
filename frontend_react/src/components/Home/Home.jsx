@@ -11,6 +11,18 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const { visible, text, showNotification } = useNotification();
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = useState([]);
   const [searchResults, setSearchResults] = useState([]); // State to store search results
+  const [selectedSongs, setSelectedSongs] = useState([]); // New state for selected songs
+  
+  const handleSongCardClick = (songId, isSelected) => {
+    // Update the list of selected songs based on the click
+    if (isSelected) {
+      setSelectedSongs((prevSelectedSongs) =>
+        prevSelectedSongs.filter((id) => id !== songId)
+      );
+    } else {
+      setSelectedSongs((prevSelectedSongs) => [...prevSelectedSongs, songId]);
+    }
+  };
   
   const handleSearchPerformed = () => {
     showNotification(`Successful search! The results will be found in the search results box.`, 3000);  
@@ -49,6 +61,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   // Filter out duplicate songs
   const uniqueRecentlyPlayedTracks = filterUniqueSongs(recentlyPlayedTracks);
 
+  
 
   return (
     <div>

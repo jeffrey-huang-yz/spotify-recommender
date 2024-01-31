@@ -6,6 +6,20 @@ const bodyParser = require('body-parser'); // Add this line
 const app = express();
 const port = 3001;
 
+const { MongoClient } = require('mongodb');
+
+// Connection URI (replace with your actual MongoDB connection string)
+const uri = 'mongodb://localhost:27017/your-database-name';
+
+// Create a MongoDB client and connect to the database
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+client.connect().then(() => {
+  console.log('Connected to MongoDB');
+}).catch((error) => {
+  console.error('Error connecting to MongoDB:', error);
+});
+
 const spotifyApi = new SpotifyWebApi({
   clientId: 'fb7620c28e204226b196176a4f268215',
   clientSecret: '6b3a14d1ce9241e49805762910f8c0fd',
