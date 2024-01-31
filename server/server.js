@@ -1,4 +1,13 @@
 const express = require('express');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const session = require('express-session');
+const User = require('./src/models');
+
+/*
+* MongoDB
+*/
+
 const SpotifyWebApi = require('spotify-web-api-node');
 const cors = require('cors');
 const bodyParser = require('body-parser'); // Add this line
@@ -8,7 +17,7 @@ const port = 3001;
 
 const { MongoClient } = require('mongodb');
 
-// Connection URI (replace with your actual MongoDB connection string)
+// Connection URI 
 const uri = 'mongodb://localhost:27017/your-database-name';
 
 // Create a MongoDB client and connect to the database
@@ -19,6 +28,222 @@ client.connect().then(() => {
 }).catch((error) => {
   console.error('Error connecting to MongoDB:', error);
 });
+
+// CRUD operations
+
+// Create a new user
+app.post('/create-user', async (req, res) => {
+  const { email, userId } = req.body;
+
+  try {
+    // Create a new user
+    const newUser = new User({
+      email,
+      userId,
+    });
+
+    // Save the new user to the database
+    await newUser.save();
+
+    // Add default buttons for the new user
+    const buttonsData = [
+      { buttonId: 'acousticness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'danceability', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'energy', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'instrumentalness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'key', maxValue: 11, minValue: 0, targetValue: 5.5, userId: newUser._id },
+      { buttonId: 'liveness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'loudness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'mode', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'popularity', maxValue: 100, minValue: 0, targetValue: 50, userId: newUser._id },
+      { buttonId: 'speechiness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'tempo', maxValue: 250, minValue: 0, targetValue: 125, userId: newUser._id },
+      { buttonId: 'valence', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+    ];
+
+    // Insert default buttons for the new user
+    await Buttons.insertMany(buttonsData);
+
+    res.status(200).json({ success: true, message: 'User and buttons created successfully' });
+  } catch (error) {
+    console.error('Error creating user and buttons:', error);
+    res.status(500).json({ success: false, error: 'Error creating user and buttons' });
+  }
+});
+
+// Read all users
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Error fetching users' });
+  }
+});
+
+// Read a specific user by ID
+app.get('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await User.findOne({ userId });
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'Error fetching user' });
+  }
+});
+
+// Update a user by ID
+app.put('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const updatedUser = await User.findOneAndUpdate({ userId }, req.body, { new: true });
+    if (updatedUser) {
+      res.json(updatedUser);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Error updating user' });
+  }
+});
+
+// Delete a user by ID
+app.delete('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const deletedUser = await User.findOneAndDelete({ userId });
+    if (deletedUser) {
+      res.json(deletedUser);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Error deleting user' });
+  }
+});
+
+
+
+
+/*
+* Google OAuth
+*/
+
+
+app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new GoogleStrategy({
+  clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
+  clientSecret: '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',
+  callbackURL: 'http://localhost:3001/auth/google/callback',
+},
+
+(accessToken, refreshToken, profile, done) => {
+  // Check if the user already exists in the database
+  User.findOne({ googleId: profile.id }, async (err, existingUser) => {
+    if (err) {
+      return done(err);
+    }
+    if (existingUser) {
+      // User already exists, return the existing user
+      return done(null, existingUser);
+    }
+
+    try {
+      // User does not exist, create a new user in the database
+      const newUser = new User({
+        googleId: profile.id,
+        email: profile.emails[0].value,
+        
+      });
+
+      // Save the new user to the database
+      await newUser.save();
+
+      // Add default buttons for the new user
+      const buttonsData = [
+        { buttonId: 'acousticness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+        { buttonId: 'danceability', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+        { buttonId: 'energy', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+        { buttonId: 'instrumentalness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+        { buttonId: 'key', maxValue: 11, minValue: 0, targetValue: 5.5, userId: newUser._id },
+        { buttonId: 'liveness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+        { buttonId: 'loudness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+        { buttonId: 'mode', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+        { buttonId: 'popularity', maxValue: 100, minValue: 0, targetValue: 50, userId: newUser._id },
+        { buttonId: 'speechiness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+        { buttonId: 'tempo', maxValue: 250, minValue: 0, targetValue: 125, userId: newUser._id },
+        { buttonId: 'valence', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+      ];
+
+      // Insert default buttons for the new user
+      await Buttons.insertMany(buttonsData);
+
+      return done(null, newUser);
+    } catch (error) {
+      console.error('Error creating user and buttons:', error);
+      return done(error);
+    }
+  });
+}));
+
+
+passport.serializeUser((user, done) => {
+  // Serialize user data (save only what you need) into the session
+  done(null, user);
+});
+
+passport.deserializeUser((obj, done) => {
+  // Deserialize user data from the session
+  done(null, obj);
+});
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+  const { OAuth2Client } = require('google-auth-library');
+  const google = require('googleapis').google;
+  
+  const oAuth2Client = new OAuth2Client({
+    clientId: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
+    clientSecret: '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',
+    redirectUri: 'http://localhost:3001/auth/google/callback',
+  });
+  
+  app.get('/auth/google/callback', async (req, res) => {
+    const { code } = req.query;
+  
+    try {
+      // Use the code to exchange for tokens
+      const { tokens } = await oAuth2Client.getToken(code);
+  
+      // Store the tokens securely, e.g., in a database
+      console.log('Access Token:', tokens.access_token);
+      console.log('Refresh Token:', tokens.refresh_token);
+  
+      // Redirect the user to a relevant page
+      res.redirect('http://localhost:3000/home');
+    } catch (error) {
+      console.error('Error during token exchange:', error);
+      res.status(500).send('Error during token exchange');
+    }
+  });
+
+
+
+/**
+ * SpotifyWebApi
+*/
 
 const spotifyApi = new SpotifyWebApi({
   clientId: 'fb7620c28e204226b196176a4f268215',
@@ -259,7 +484,49 @@ app.get('/user', async (req, res) => {
   }
 });
 
+/*
+* Router
+*/
 
+// In your Express routes or a dedicated file
+
+const router = express.Router();
+
+
+router.put('/update-button/:userId/:buttonId', async (req, res) => {
+  try {
+    const { userId, buttonId } = req.params;
+    const { min, max, target } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Find the button within the user's buttons array
+    const button = user.buttons.id(buttonId);
+
+    if (!button) {
+      return res.status(404).json({ error: 'Button not found' });
+    }
+
+    // Update the button properties
+    button.minValue = min;
+    button.maxValue = max;
+    button.targetValue = target;
+
+    // Save the updated user
+    await user.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error updating button:', error);
+    res.status(500).json({ error: 'Error updating button' });
+  }
+});
+
+module.exports = router;
 
 // Start the server
 const PORT = process.env.PORT || 3001;

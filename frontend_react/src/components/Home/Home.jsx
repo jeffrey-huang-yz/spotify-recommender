@@ -6,13 +6,15 @@ import './Home.scss';
 import { AppWrap } from '../../wrapper';
 import useNotification from '../../NotificationHome/useNotification';
 import NotificationBox from '../../NotificationHome/NotificationBox';
-
+import Popup from '../../Popup/Popup';
 function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const { visible, text, showNotification } = useNotification();
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = useState([]);
   const [searchResults, setSearchResults] = useState([]); // State to store search results
   const [selectedSongs, setSelectedSongs] = useState([]); // New state for selected songs
-  
+  const [buttons, setButtons] = useState([]);
+
+
   const handleSongCardClick = (songId, isSelected) => {
     // Update the list of selected songs based on the click
     if (isSelected) {
@@ -23,7 +25,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       setSelectedSongs((prevSelectedSongs) => [...prevSelectedSongs, songId]);
     }
   };
-  
+
   const handleSearchPerformed = () => {
     showNotification(`Successful search! The results will be found in the search results box.`, 3000);  
   };
@@ -36,9 +38,19 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       } catch (error) {
         console.error('Error fetching recently played tracks:', error);
       }
+
+      axios.get('/buttons')
+      .then(response => {
+        setButtons(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching buttons:', error);
+      });
     };
 
     fetchRecentlyPlayedTracks();
+
+    window.location.href = 'http://localhost:3001/auth/google';
   }, []);
 
   const handleSearch = async (searchData) => {
@@ -61,7 +73,32 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   // Filter out duplicate songs
   const uniqueRecentlyPlayedTracks = filterUniqueSongs(recentlyPlayedTracks);
 
-  
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupValue, setPopupValue] = useState(50); // Initial value for the pop-up
+
+  const [buttonValues, setButtonValues] = useState({
+    button1: 25,
+    button2: 50,
+    button3: 75,
+    // Add more buttons and their default values as needed
+  });
+
+  const handlePopupOpen = () => {
+    setShowPopup(true);
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+  };
+
+  const handlePopupValueChange = (value) => {
+    setPopupValue(value);
+  };
+
+  const handleButtonClick = (buttonName, buttonId) => {
+    setPopupValue(buttonValues[buttonName]);
+    handlePopupOpen();
+  };
 
   return (
     <div>
@@ -75,6 +112,26 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       <div className='searchbar'>
         {/* Include the SearchBar component */}
         <SearchBar onSearch={handleSearch} onSearchPerformed={handleSearchPerformed}/>
+      </div>
+      
+      <div>
+        {buttons.map((button) => (
+          <button
+            key={button.buttonId}
+            onClick={() => handleButtonClick(button.buttonId)}
+          >
+            {button.buttonId}
+          </button>
+        ))}
+      </div>
+
+      <div>
+        {/* Pill-shaped buttons */}
+      
+        {/* Pop-up */}
+        {showPopup && (
+          <Popup onClose={handlePopupClose} onValueChange={handlePopupValueChange} initialValue={popupValue} />
+        )}
       </div>
 
       <div className='song-cards-container'>
