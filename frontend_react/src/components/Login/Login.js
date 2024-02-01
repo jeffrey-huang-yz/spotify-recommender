@@ -7,6 +7,7 @@ const Login = () => {
 
   useEffect(() => {
     handleSpotifyLogin();
+    
   }, [navigate]);
 
   const handleSpotifyLogin = async () => {

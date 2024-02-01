@@ -2,23 +2,25 @@ const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
-const User = require('./src/models');
+const User = require('./src/User');
+const app = express();
+
+const cors=require("cors");
+app.use(cors({ origin: true, credentials: true }));
+const port = 3001;
 
 /*
 * MongoDB
 */
 
 const SpotifyWebApi = require('spotify-web-api-node');
-const cors = require('cors');
 const bodyParser = require('body-parser'); // Add this line
 
-const app = express();
-const port = 3001;
 
 const { MongoClient } = require('mongodb');
 
 // Connection URI 
-const uri = 'mongodb://localhost:27017/your-database-name';
+const uri = 'mongodb://localhost:27017';
 
 // Create a MongoDB client and connect to the database
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -83,10 +85,10 @@ app.get('/users', async (req, res) => {
 });
 
 // Read a specific user by ID
-app.get('/users/:userId', async (req, res) => {
-  const { userId } = req.params;
+app.get('/users/:googleId', async (req, res) => {
+  const { googleId } = req.params;
   try {
-    const user = await User.findOne({ userId });
+    const user = await User.findOne({ googleId });
     if (user) {
       res.json(user);
     } else {
@@ -99,10 +101,10 @@ app.get('/users/:userId', async (req, res) => {
 });
 
 // Update a user by ID
-app.put('/users/:userId', async (req, res) => {
-  const { userId } = req.params;
+app.put('/users/:googleId', async (req, res) => {
+  const { googleId } = req.params;
   try {
-    const updatedUser = await User.findOneAndUpdate({ userId }, req.body, { new: true });
+    const updatedUser = await User.findOneAndUpdate({ googleId }, req.body, { new: true });
     if (updatedUser) {
       res.json(updatedUser);
     } else {
@@ -115,10 +117,10 @@ app.put('/users/:userId', async (req, res) => {
 });
 
 // Delete a user by ID
-app.delete('/users/:userId', async (req, res) => {
-  const { userId } = req.params;
+app.delete('/users/:googleId', async (req, res) => {
+  const { googleId } = req.params;
   try {
-    const deletedUser = await User.findOneAndDelete({ userId });
+    const deletedUser = await User.findOneAndDelete({ googleId });
     if (deletedUser) {
       res.json(deletedUser);
     } else {
@@ -137,7 +139,6 @@ app.delete('/users/:userId', async (req, res) => {
 * Google OAuth
 */
 
-
 app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -146,55 +147,50 @@ passport.use(new GoogleStrategy({
   clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
   clientSecret: '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',
   callbackURL: 'http://localhost:3001/auth/google/callback',
-},
-
-(accessToken, refreshToken, profile, done) => {
+  accessType: 'offline', 
+}, async (accessToken, refreshToken, profile, done) => {
   // Check if the user already exists in the database
-  User.findOne({ googleId: profile.id }, async (err, existingUser) => {
-    if (err) {
-      return done(err);
-    }
+  try {
+    const existingUser = await User.findOne({ googleId: profile.id });
+
     if (existingUser) {
       // User already exists, return the existing user
       return done(null, existingUser);
     }
 
-    try {
+  
+    
+      // Add default buttons for the new user
+      const buttonsData = [
+        { buttonId: 'acousticness', maxValue: 1, minValue: 0, targetValue: 0.5 },
+        { buttonId: 'danceability', maxValue: 1, minValue: 0, targetValue: 0.5 },
+        { buttonId: 'energy', maxValue: 1, minValue: 0, targetValue: 0.5 },
+        { buttonId: 'instrumentalness', maxValue: 1, minValue: 0, targetValue: 0.5 },
+        { buttonId: 'key', maxValue: 11, minValue: 0, targetValue: 5.5 },
+        { buttonId: 'liveness', maxValue: 1, minValue: 0, targetValue: 0.5 },
+        { buttonId: 'loudness', maxValue: 1, minValue: 0, targetValue: 0.5 },
+        { buttonId: 'mode', maxValue: 1, minValue: 0, targetValue: 0.5 },
+        { buttonId: 'popularity', maxValue: 100, minValue: 0, targetValue: 50 }, 
+        { buttonId: 'speechiness', maxValue: 1, minValue: 0, targetValue: 0.5 },
+        { buttonId: 'tempo', maxValue: 250, minValue: 0, targetValue: 125 },
+        { buttonId: 'valence', maxValue: 1, minValue: 0, targetValue: 0.5 },
+      ];
+
       // User does not exist, create a new user in the database
       const newUser = new User({
         googleId: profile.id,
         email: profile.emails[0].value,
-        
+        buttons:  buttonsData,
       });
 
-      // Save the new user to the database
       await newUser.save();
-
-      // Add default buttons for the new user
-      const buttonsData = [
-        { buttonId: 'acousticness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-        { buttonId: 'danceability', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-        { buttonId: 'energy', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-        { buttonId: 'instrumentalness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-        { buttonId: 'key', maxValue: 11, minValue: 0, targetValue: 5.5, userId: newUser._id },
-        { buttonId: 'liveness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-        { buttonId: 'loudness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-        { buttonId: 'mode', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-        { buttonId: 'popularity', maxValue: 100, minValue: 0, targetValue: 50, userId: newUser._id },
-        { buttonId: 'speechiness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-        { buttonId: 'tempo', maxValue: 250, minValue: 0, targetValue: 125, userId: newUser._id },
-        { buttonId: 'valence', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-      ];
-
-      // Insert default buttons for the new user
-      await Buttons.insertMany(buttonsData);
 
       return done(null, newUser);
     } catch (error) {
       console.error('Error creating user and buttons:', error);
       return done(error);
     }
-  });
+  
 }));
 
 
@@ -203,13 +199,18 @@ passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser((obj, done) => {
-  // Deserialize user data from the session
-  done(null, obj);
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
 });
 
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+'https://www.googleapis.com/auth/userinfo.email'],
+accessType: 'offline', approvalPrompt: 'force' }));
 
   const { OAuth2Client } = require('google-auth-library');
   const google = require('googleapis').google;
@@ -220,27 +221,55 @@ app.get('/auth/google',
     redirectUri: 'http://localhost:3001/auth/google/callback',
   });
   
-  app.get('/auth/google/callback', async (req, res) => {
-    const { code } = req.query;
-  
-    try {
-      // Use the code to exchange for tokens
-      const { tokens } = await oAuth2Client.getToken(code);
-  
-      // Store the tokens securely, e.g., in a database
-      console.log('Access Token:', tokens.access_token);
-      console.log('Refresh Token:', tokens.refresh_token);
-  
-      // Redirect the user to a relevant page
-      res.redirect('http://localhost:3000/home');
-    } catch (error) {
-      console.error('Error during token exchange:', error);
-      res.status(500).send('Error during token exchange');
+  app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    // Successful authentication, redirect to the login page
+    res.redirect('http://localhost:3000/login');
+  }
+);
+
+app.get(
+  '/googleuser',
+  passport.authenticate('google', {
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email'
+    ],
+    accessType: 'offline',
+    approvalPrompt: 'force'
+  })
+);
+
+app.get('/googleuser/data', async (req, res) => {
+  try {
+    passport.authenticate('google', { failureRedirect: '/' });
+    if (req.isAuthenticated()) {
+      // If the user is authenticated, retrieve user data from the database
+      const googleId = req.user.googleId; // Assuming your User model has a field googleId for user identification
+
+      try {
+        const user = await User.findOne({ googleId });
+
+        if (user) {
+          console.log(user);
+          res.json(user);
+        } else {
+          res.status(404).json({ error: 'User not found' });
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ error: 'Error fetching user' });
+      }
+    } else {
+      // The user is not authenticated, send an error response
+      res.status(401).json({ error: 'Not authenticated' });
     }
-  });
-
-
-
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+    res.status(500).json({ error: 'Error checking authentication' });
+  }
+});
 /**
  * SpotifyWebApi
 */
@@ -320,7 +349,6 @@ app.get('/recently-played', async (req, res) => {
   try {
     const response = await spotifyApi.getMyRecentlyPlayedTracks();
     const tracks = response.body.items.map(item => {
-      console.log('item.album:', item.track.album);
       return {
         id: item.track.uri,
         name: item.track.name,
@@ -469,7 +497,7 @@ app.put('/play', async (req, res) => {
 
 
 
-app.get('/user', async (req, res) => {
+app.get('/spotifyuser', async (req, res) => {
   try {
     const response = await spotifyApi.getMe();
     const user = {

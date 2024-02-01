@@ -12,8 +12,8 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const [recentlyPlayedTracks, setRecentlyPlayedTracks] = useState([]);
   const [searchResults, setSearchResults] = useState([]); // State to store search results
   const [selectedSongs, setSelectedSongs] = useState([]); // New state for selected songs
-  const [buttons, setButtons] = useState([]);
-
+  const [user, setUser] = useState(null);
+  const [selectedButton, setSelectedButton] = useState(null);
 
   const handleSongCardClick = (songId, isSelected) => {
     // Update the list of selected songs based on the click
@@ -31,6 +31,11 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   };
 
   useEffect(() => {
+    const fetchUser = async () => {
+        const response = await axios.get('http://localhost:3001/googleuser/data', { withCredentials: true })
+        setUser(response.data);
+    };
+
     const fetchRecentlyPlayedTracks = async () => {
       try {
         const response = await axios.get('http://localhost:3001/recently-played');
@@ -39,18 +44,11 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
         console.error('Error fetching recently played tracks:', error);
       }
 
-      axios.get('/buttons')
-      .then(response => {
-        setButtons(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching buttons:', error);
-      });
     };
 
     fetchRecentlyPlayedTracks();
-
-    window.location.href = 'http://localhost:3001/auth/google';
+    fetchUser();
+    
   }, []);
 
   const handleSearch = async (searchData) => {
@@ -73,31 +71,25 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   // Filter out duplicate songs
   const uniqueRecentlyPlayedTracks = filterUniqueSongs(recentlyPlayedTracks);
 
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupValue, setPopupValue] = useState(50); // Initial value for the pop-up
 
-  const [buttonValues, setButtonValues] = useState({
-    button1: 25,
-    button2: 50,
-    button3: 75,
-    // Add more buttons and their default values as needed
-  });
-
-  const handlePopupOpen = () => {
-    setShowPopup(true);
+ const handleButtonClick = (buttonId) => {
+    // Find the clicked button in the user's buttons array
+    const clickedButton = user.buttons.find((button) => button.buttonId === buttonId);
+    setSelectedButton(clickedButton);
   };
 
-  const handlePopupClose = () => {
-    setShowPopup(false);
+  const handleClosePopup = () => {
+    setSelectedButton(null);
   };
 
-  const handlePopupValueChange = (value) => {
-    setPopupValue(value);
-  };
-
-  const handleButtonClick = (buttonName, buttonId) => {
-    setPopupValue(buttonValues[buttonName]);
-    handlePopupOpen();
+  const handleRangeChange = ({ min, max, target }) => {
+    // Update the selectedButton state with the new range values
+    setSelectedButton((prevButton) => ({
+      ...prevButton,
+      minValue: min,
+      maxValue: max,
+      targetValue: target,
+    }));
   };
 
   return (
@@ -114,8 +106,8 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
         <SearchBar onSearch={handleSearch} onSearchPerformed={handleSearchPerformed}/>
       </div>
       
-      <div>
-        {buttons.map((button) => (
+        <div>
+        {user && user.buttons.map((button) => (
           <button
             key={button.buttonId}
             onClick={() => handleButtonClick(button.buttonId)}
@@ -126,12 +118,16 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       </div>
 
       <div>
-        {/* Pill-shaped buttons */}
-      
-        {/* Pop-up */}
-        {showPopup && (
-          <Popup onClose={handlePopupClose} onValueChange={handlePopupValueChange} initialValue={popupValue} />
-        )}
+      {selectedButton && (
+        <Popup
+          onClose={handleClosePopup}
+          onRangeChange={handleRangeChange}
+          initialMinValue={selectedButton.minValue}
+          initialMaxValue={selectedButton.maxValue}
+          buttonId={selectedButton.buttonId}
+          userId={user._id} // Assuming user object has _id field
+        />
+      )}
       </div>
 
       <div className='song-cards-container'>

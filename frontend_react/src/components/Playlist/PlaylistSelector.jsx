@@ -13,7 +13,7 @@ const PlaylistSelector = ({ onSelect }) => {
     const fetchPlaylists = async () => {
       try {
         const response = await axios.get('http://localhost:3001/user-playlists');
-        const userResponse = await axios.get('http://localhost:3001/user');
+        const userResponse = await axios.get('http://localhost:3001/spotifyuser');
         
         const userOwnedPlaylists = response.data.filter((playlist) => {
           return playlist.owner.id === userResponse.data.id;
