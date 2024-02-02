@@ -7,8 +7,10 @@ var UserDetail = new Schema({
   buttons: [
     {
       buttonId: String,
-      maxValue: Number,
-      minValue: Number,
+      max: Number,
+      min: Number,
+      userMax: Number,
+      userMin: Number,
       targetValue: Number,
     }
   ],

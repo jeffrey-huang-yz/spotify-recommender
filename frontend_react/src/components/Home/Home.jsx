@@ -82,15 +82,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
     setSelectedButton(null);
   };
 
-  const handleRangeChange = ({ min, max, target }) => {
-    // Update the selectedButton state with the new range values
-    setSelectedButton((prevButton) => ({
-      ...prevButton,
-      minValue: min,
-      maxValue: max,
-      targetValue: target,
-    }));
-  };
+
 
   return (
     <div>
@@ -100,36 +92,45 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
           <span className="home-purple">disk</span>overy
         </h1>
       </div>
+
       <NotificationBox visible={visible} text={text} />
+
       <div className='searchbar'>
         {/* Include the SearchBar component */}
         <SearchBar onSearch={handleSearch} onSearchPerformed={handleSearchPerformed}/>
       </div>
       
-        <div>
+        
+        
+      <div className='button-container'>
         {user && user.buttons.map((button) => (
           <button
             key={button.buttonId}
             onClick={() => handleButtonClick(button.buttonId)}
+            className={'button-item'}
           >
             {button.buttonId}
           </button>
         ))}
       </div>
-
-      <div>
+        
+      <div className='buttoncontainer'>
       {selectedButton && (
         <Popup
           onClose={handleClosePopup}
-          onRangeChange={handleRangeChange}
-          initialMinValue={selectedButton.minValue}
-          initialMaxValue={selectedButton.maxValue}
+          min = {selectedButton.min}
+          max = {selectedButton.max}
+          userMin = {selectedButton.userMin}
+          userMax = {selectedButton.userMax}
           buttonId={selectedButton.buttonId}
-          userId={user._id} // Assuming user object has _id field
+          targetValue={selectedButton.targetValue}
+          userId={user.id}
         />
       )}
       </div>
 
+
+      
       <div className='song-cards-container'>
         {/* Display search results if available */}
         <div className="search-results">

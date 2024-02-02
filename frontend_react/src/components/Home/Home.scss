@@ -80,12 +80,24 @@
   margin-top: 10px;
 }
 
-.pill-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
-  background-color: #007bff;
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
+.button-item {
+  padding:  0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  color: #b702ff;
+  font-weight: 800;
+  cursor:pointer;
+  transition: all 0.3s ease;
+  margin: 0.5rem;
+
+}
+
+.button-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-left: 20%;
+  margin-right: 20%;
 }

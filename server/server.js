@@ -49,18 +49,18 @@ app.post('/create-user', async (req, res) => {
 
     // Add default buttons for the new user
     const buttonsData = [
-      { buttonId: 'acousticness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-      { buttonId: 'danceability', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-      { buttonId: 'energy', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-      { buttonId: 'instrumentalness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-      { buttonId: 'key', maxValue: 11, minValue: 0, targetValue: 5.5, userId: newUser._id },
-      { buttonId: 'liveness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-      { buttonId: 'loudness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-      { buttonId: 'mode', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-      { buttonId: 'popularity', maxValue: 100, minValue: 0, targetValue: 50, userId: newUser._id },
-      { buttonId: 'speechiness', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
-      { buttonId: 'tempo', maxValue: 250, minValue: 0, targetValue: 125, userId: newUser._id },
-      { buttonId: 'valence', maxValue: 1, minValue: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'acousticness', maxValue: 1, minValue: 0, userMax: 1, userMin: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'danceability', maxValue: 1, minValue: 0, userMax: 1, userMin: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'energy', maxValue: 1, minValue: 0, userMax: 1, userMin: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'instrumentalness', maxValue: 1, minValue: 0, userMax: 1, userMin: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'key', maxValue: 11, minValue: 0, userMax: 11, userMin: 0, targetValue: 5.5, userId: newUser._id },
+      { buttonId: 'liveness', maxValue: 1, minValue: 0, userMax: 1, userMin: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'loudness', maxValue: 1, minValue: 0, userMax: 1, userMin: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'mode', maxValue: 1, minValue: 0, userMax: 1, userMin: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'popularity', maxValue: 100, minValue: 0, userMax: 100, userMin: 0, targetValue: 50, userId: newUser._id },
+      { buttonId: 'speechiness', maxValue: 1, minValue: 0, userMax: 1, userMin: 0, targetValue: 0.5, userId: newUser._id },
+      { buttonId: 'tempo', maxValue: 250, minValue: 0, userMax: 250, userMin: 0, targetValue: 125, userId: newUser._id },
+      { buttonId: 'valence', maxValue: 1, minValue: 0, userMax: 1, userMin: 0, targetValue: 0.5, userId: newUser._id },
     ];
 
     // Insert default buttons for the new user
@@ -162,18 +162,18 @@ passport.use(new GoogleStrategy({
     
       // Add default buttons for the new user
       const buttonsData = [
-        { buttonId: 'acousticness', maxValue: 1, minValue: 0, targetValue: 0.5 },
-        { buttonId: 'danceability', maxValue: 1, minValue: 0, targetValue: 0.5 },
-        { buttonId: 'energy', maxValue: 1, minValue: 0, targetValue: 0.5 },
-        { buttonId: 'instrumentalness', maxValue: 1, minValue: 0, targetValue: 0.5 },
-        { buttonId: 'key', maxValue: 11, minValue: 0, targetValue: 5.5 },
-        { buttonId: 'liveness', maxValue: 1, minValue: 0, targetValue: 0.5 },
-        { buttonId: 'loudness', maxValue: 1, minValue: 0, targetValue: 0.5 },
-        { buttonId: 'mode', maxValue: 1, minValue: 0, targetValue: 0.5 },
-        { buttonId: 'popularity', maxValue: 100, minValue: 0, targetValue: 50 }, 
-        { buttonId: 'speechiness', maxValue: 1, minValue: 0, targetValue: 0.5 },
-        { buttonId: 'tempo', maxValue: 250, minValue: 0, targetValue: 125 },
-        { buttonId: 'valence', maxValue: 1, minValue: 0, targetValue: 0.5 },
+        { buttonId: 'acousticness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+        { buttonId: 'danceability', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+        { buttonId: 'energy', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+        { buttonId: 'instrumentalness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+        { buttonId: 'key', max: 11, min: 0, userMax: 11, userMin: 0, targetValue: 5.5 },
+        { buttonId: 'liveness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+        { buttonId: 'loudness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+        { buttonId: 'mode', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+        { buttonId: 'popularity', max: 100, min: 0, userMax: 100, userMin: 0, targetValue: 50 },
+        { buttonId: 'speechiness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+        { buttonId: 'tempo', max: 250, min: 0, userMax: 250, userMin: 0, targetValue: 125 },
+        { buttonId: 'valence', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5},
       ];
 
       // User does not exist, create a new user in the database

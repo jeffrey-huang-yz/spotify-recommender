@@ -1,41 +1,52 @@
-// Popup.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Slider, { Range } from 'rc-slider';
+import "rc-slider/assets/index.css";
 import './Popup.scss';
+const Popup = ({
+  onClose,
+  min,
+  max,
+  userMin,
+  userMax,
+  targetValue,
+  buttonId,
+  userId
+}) => {
+  const [sliderValues, setSliderValues] = useState([userMin, userMax]);
+  const [targetValues, setTargetValue] = useState(targetValue);
+  const [defaultValues, setDefaultValues] = useState([userMin, userMax]);
 
-const Popup = ({ onClose, onRangeChange, initialMinValue, initialMaxValue, buttonId, userId }) => {
-  const [minValue, setMinValue] = useState(initialMinValue);
-  const [maxValue, setMaxValue] = useState(initialMaxValue);
-  const [targetValue, setTargetValue] = useState((initialMinValue + initialMaxValue) / 2);
+  useEffect(() => {
+    setSliderValues([userMin, userMax]);
+    setTargetValue(targetValue);
+    setDefaultValues([userMin, userMax]);
+  }, [userMin, userMax, targetValue]);
 
-  const handleRangeChange = (event) => {
-    const min = parseInt(event.target.value.split(',')[0], 10);
-    const max = parseInt(event.target.value.split(',')[1], 10);
-    const target = Math.min(Math.max(targetValue, min), max); // Ensure target is within the range
-
-    setMinValue(min);
-    setMaxValue(max);
-    setTargetValue(target);
-    onRangeChange({ min, max, target });
-
-    axios.put(`/api/update-button/${userId}/${buttonId}`, { min, max, target })
-    .then(response => {
-      console.log('Button updated successfully');
-    })
-    .catch(error => {
-      console.error('Error updating button:', error);
-    });
+  const handleSliderChange = values => {
+    setSliderValues(values);
   };
 
-  const handleInputChange = (event) => {
-    const min = parseInt(event.target.value.split(',')[0], 10);
-    const max = parseInt(event.target.value.split(',')[1], 10);
-    const target = Math.min(Math.max(targetValue, min), max); // Ensure target is within the range
+  const handleTargetValueChange = value => {
+    setTargetValue(value);
+  };
 
-    setMinValue(min);
-    setMaxValue(max);
-    setTargetValue(target);
-    onRangeChange({ min, max, target });
+  const handleSave = () => {
+    // Save the updated values to the server
+    const updatedButtonData = {
+      userMin: sliderValues[0],
+      userMax: sliderValues[1],
+      targetValues,
+    };
+
+    axios
+      .put(`http://localhost:3001/update-button/${userId}/${buttonId}`, updatedButtonData)
+      .then((response) => {
+        console.log('Button updated successfully');
+      })
+      .catch((error) => {
+        console.error('Error updating button:', error);
+      });
   };
 
   return (
@@ -46,27 +57,32 @@ const Popup = ({ onClose, onRangeChange, initialMinValue, initialMaxValue, butto
             Close
           </button>
         </div>
-        <div className="popup-body">
-          <label>
-            Range: {minValue} - {maxValue}
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={`${minValue},${maxValue}`}
-              onChange={handleRangeChange}
-            />
-            <div className="target-dot" style={{ left: `${(targetValue - minValue) / (maxValue - minValue) * 100}%` }}></div>
-          </label>
-          <br />
-          <label>
-            Type Range:
-            <input
-              type="text"
-              value={`${minValue},${maxValue}`}
-              onChange={handleInputChange}
-            />
-          </label>
+        <div>
+          <Slider range
+            min={min}
+            max={max}
+            step={0.01}
+            value={sliderValues}
+            onChange={handleSliderChange}
+            defaultValue={defaultValues}
+          />
+          <div>
+            <span>User Min: {sliderValues[0]}</span>
+            <span>User Max: {sliderValues[1]}</span>
+          </div>
+        </div>
+        <div>
+          <Slider
+            min={min}
+            max={max}
+            step={0.01}
+            value={targetValues}
+            onChange={handleTargetValueChange}
+          />
+          <div>
+            <span>Target Value: {targetValues}</span>
+          </div>
+          <button onClick={handleSave}>Save</button>
         </div>
       </div>
     </div>
