@@ -85,11 +85,11 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
 
 
   return (
-    <div>
+    <div className='noselect'>
       {/* Discovery Section */}
       <div className="home-title">
-        <h1>
-          <span className="home-purple">disk</span>overy
+        <h1 className='noselect'>
+          <span className="home-purple noselect">disk</span>overy
         </h1>
       </div>
 
@@ -124,7 +124,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
           userMax = {selectedButton.userMax}
           buttonId={selectedButton.buttonId}
           targetValue={selectedButton.targetValue}
-          userId={user.id}
+          id={user.userId}
         />
       )}
       </div>
@@ -148,7 +148,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       </div>
 
       {/* Recently Played Tracks Section */}
-      <div className="song-cards-container">
+      <div className="song-cards-container ">
         <div className='recently-played'>
           <h2>Recently Played Tracks</h2>
 

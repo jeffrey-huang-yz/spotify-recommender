@@ -85,10 +85,10 @@ app.get('/users', async (req, res) => {
 });
 
 // Read a specific user by ID
-app.get('/users/:googleId', async (req, res) => {
-  const { googleId } = req.params;
+app.get('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
   try {
-    const user = await User.findOne({ googleId });
+    const user = await User.findOne({ userId });
     if (user) {
       res.json(user);
     } else {
@@ -100,11 +100,26 @@ app.get('/users/:googleId', async (req, res) => {
   }
 });
 
+app.use(express.json());
+
 // Update a user by ID
-app.put('/users/:googleId', async (req, res) => {
-  const { googleId } = req.params;
+app.put('/googleusers/:userId/:buttonId', async (req, res) => {
+  const { userId, buttonId } = req.params;
+  const { userMin, userMax, targetValue } = req.body;
+
   try {
-    const updatedUser = await User.findOneAndUpdate({ googleId }, req.body, { new: true });
+    const updatedUser = await User.updateOne(
+      { userId: userId, 'buttons.buttonId': buttonId },
+      {
+        $set: {
+          'buttons.$.userMin': userMin,
+          'buttons.$.userMax': userMax,
+          'buttons.$.targetValue': targetValue,
+        },
+      },
+      { new: true }
+    );
+
     if (updatedUser) {
       res.json(updatedUser);
     } else {
@@ -117,10 +132,10 @@ app.put('/users/:googleId', async (req, res) => {
 });
 
 // Delete a user by ID
-app.delete('/users/:googleId', async (req, res) => {
-  const { googleId } = req.params;
+app.delete('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
   try {
-    const deletedUser = await User.findOneAndDelete({ googleId });
+    const deletedUser = await User.findOneAndDelete({ userId });
     if (deletedUser) {
       res.json(deletedUser);
     } else {
@@ -151,7 +166,7 @@ passport.use(new GoogleStrategy({
 }, async (accessToken, refreshToken, profile, done) => {
   // Check if the user already exists in the database
   try {
-    const existingUser = await User.findOne({ googleId: profile.id });
+    const existingUser = await User.findOne({ userId: profile.id });
 
     if (existingUser) {
       // User already exists, return the existing user
@@ -178,7 +193,7 @@ passport.use(new GoogleStrategy({
 
       // User does not exist, create a new user in the database
       const newUser = new User({
-        googleId: profile.id,
+        userId: profile.id,
         email: profile.emails[0].value,
         buttons:  buttonsData,
       });
@@ -246,10 +261,10 @@ app.get('/googleuser/data', async (req, res) => {
     passport.authenticate('google', { failureRedirect: '/' });
     if (req.isAuthenticated()) {
       // If the user is authenticated, retrieve user data from the database
-      const googleId = req.user.googleId; // Assuming your User model has a field googleId for user identification
+      const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
 
       try {
-        const user = await User.findOne({ googleId });
+        const user = await User.findOne({ userId });
 
         if (user) {
           console.log(user);

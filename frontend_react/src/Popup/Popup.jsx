@@ -3,6 +3,8 @@ import axios from 'axios';
 import Slider, { Range } from 'rc-slider';
 import "rc-slider/assets/index.css";
 import './Popup.scss';
+import { IoMdClose } from "react-icons/io";
+
 const Popup = ({
   onClose,
   min,
@@ -11,51 +13,55 @@ const Popup = ({
   userMax,
   targetValue,
   buttonId,
-  userId
+  id
 }) => {
   const [sliderValues, setSliderValues] = useState([userMin, userMax]);
   const [targetValues, setTargetValue] = useState(targetValue);
   const [defaultValues, setDefaultValues] = useState([userMin, userMax]);
+  const [userId, setUserId] = useState(id);
 
   useEffect(() => {
     setSliderValues([userMin, userMax]);
     setTargetValue(targetValue);
     setDefaultValues([userMin, userMax]);
-  }, [userMin, userMax, targetValue]);
+    setUserId(id);
+  }, [userMin, userMax, targetValue, id]);
 
-  const handleSliderChange = values => {
-    setSliderValues(values);
+  const handleSliderChange = (newUserMin, newUserMax) => {
+    setSliderValues(newUserMin, newUserMax);
+    console.log('sliderValues:', sliderValues);
   };
 
   const handleTargetValueChange = value => {
     setTargetValue(value);
   };
 
-  const handleSave = () => {
-    // Save the updated values to the server
+  const handleSave = async () => {
     const updatedButtonData = {
       userMin: sliderValues[0],
       userMax: sliderValues[1],
-      targetValues,
+      targetValue: targetValues,
     };
-
-    axios
-      .put(`http://localhost:3001/update-button/${userId}/${buttonId}`, updatedButtonData)
-      .then((response) => {
-        console.log('Button updated successfully');
-      })
-      .catch((error) => {
-        console.error('Error updating button:', error);
-      });
+  
+    try {
+      const response = await axios.put(`http://localhost:3001/googleusers/${id}/${buttonId}`, updatedButtonData);
+  
+      if (response.status === 200) {
+        console.log('User updated successfully');
+      } else {
+        console.error('Error updating user:', response.data.error);
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
   };
 
   return (
     <div className="popup-overlay">
       <div className="popup-content">
         <div className="popup-header">
-          <button className="popup-close-button" onClick={onClose}>
-            Close
-          </button>
+          <h2>{buttonId}</h2>
+        <IoMdClose size="30px" onClick={onClose} className='close-button' style={{ marginBottom: '10px' }}/>
         </div>
         <div>
           <Slider range
@@ -66,9 +72,13 @@ const Popup = ({
             onChange={handleSliderChange}
             defaultValue={defaultValues}
           />
-          <div>
-            <span>User Min: {sliderValues[0]}</span>
-            <span>User Max: {sliderValues[1]}</span>
+          <div className='slider-value-text-container'>
+            <div>
+              <span>Min: {sliderValues[0]}</span>
+            </div>
+            <div>
+              <span>Max: {sliderValues[1]}</span>
+            </div>
           </div>
         </div>
         <div>
@@ -79,10 +89,10 @@ const Popup = ({
             value={targetValues}
             onChange={handleTargetValueChange}
           />
-          <div>
+          <div className='target-text'>
             <span>Target Value: {targetValues}</span>
           </div>
-          <button onClick={handleSave}>Save</button>
+          <button onClick={handleSave} className='save-button'>Save</button>
         </div>
       </div>
     </div>

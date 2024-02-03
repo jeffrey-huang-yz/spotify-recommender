@@ -10,6 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 100;
 }
 
 .popup-content {
@@ -21,19 +22,41 @@
 
 .popup-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
-.popup-close-button {
+.close-button {
   cursor: pointer;
   background: none;
   border: none;
-  font-size: 16px;
-  color: #333;
+  color: #b702ff;
 }
 
 .popup-body {
   margin-top: 20px;
 }
 
-/* Add additional styles as needed */
+.save-button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  background: #b702ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.slider-value-text-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.target-text{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
