@@ -4,7 +4,7 @@ import axios from 'axios';
 import useNotification from '../Notification/useNotification';
 import NotificationBox from '../Notification/NotificationBox';
 
-const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongCardClick, isSelected }) => {
+const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect, isSelected }) => {
   const { visible, text, showNotification } = useNotification();
   
   useEffect(() => {
@@ -14,7 +14,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongCardCl
   
   const handlePlay = async () => {
     try {
-      // Call the /play route on your server with the selectedPlaylistId
+      // Call the /play routewith the selectedPlaylistId
       const response = await axios.put('http://localhost:3001/play', {
         trackUri: song.uri
       });
@@ -35,7 +35,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongCardCl
     // Check if the song is already in the playlist
     const playlistDetailsResponse = await axios.get(`http://localhost:3001/playlist-details/${selectedPlaylistId}`);
     const playlistTracks = playlistDetailsResponse.data;
-    const isSongInPlaylist = playlistTracks.some(items => items.track.uri === song.id);
+    const isSongInPlaylist = playlistTracks.some(items => items.track.id === song.id);
 
 
     if (isSongInPlaylist) {
@@ -66,21 +66,22 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongCardCl
 
 
   const handleContainerClick = async () => {
-    onSongCardClick(song.id, isSelected);
+    onSongSelect(song);
+    isSelected = true;
   };
 
   return (
-    <div className="song-card" onClick={handleContainerClick}>
+    <div className={'song-card'} onClick={handleContainerClick}>
       {/* Use 'albumImage' as the source for the 'img' tag */}
       <img
-        alt={song.name}
+        alt={song?.name}
         className="album-cover"
-        src={song.album.albumArt}
+        src={song?.album.albumArt}
         // Adjust the width and height as needed
       />
-      <h3>{song.name}</h3>
-      <h3>{song.artist}</h3>
-      <div className="buttons-container" onClick={handleContainerClick}>
+      <h3>{song?.name}</h3>
+      <h3>{song?.artist}</h3>
+      <div className="buttons-container" >
         <button className="play-button" onClick={handlePlay}>
           Play
         </button>

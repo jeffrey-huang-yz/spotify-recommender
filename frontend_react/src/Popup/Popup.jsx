@@ -17,14 +17,14 @@ const Popup = ({
 }) => {
   const [sliderValues, setSliderValues] = useState([userMin, userMax]);
   const [targetValues, setTargetValue] = useState(targetValue);
-  const [defaultValues, setDefaultValues] = useState([userMin, userMax]);
   const [userId, setUserId] = useState(id);
 
   useEffect(() => {
     setSliderValues([userMin, userMax]);
     setTargetValue(targetValue);
-    setDefaultValues([userMin, userMax]);
     setUserId(id);
+
+    
   }, [userMin, userMax, targetValue, id]);
 
   const handleSliderChange = (newUserMin, newUserMax) => {
@@ -48,6 +48,9 @@ const Popup = ({
   
       if (response.status === 200) {
         console.log('User updated successfully');
+        setSliderValues([sliderValues[0], sliderValues[1]]);
+        setTargetValue(targetValues);
+        this.forceUpdate();
       } else {
         console.error('Error updating user:', response.data.error);
       }
@@ -70,7 +73,6 @@ const Popup = ({
             step={0.01}
             value={sliderValues}
             onChange={handleSliderChange}
-            defaultValue={defaultValues}
           />
           <div className='slider-value-text-container'>
             <div>

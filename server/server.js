@@ -365,7 +365,7 @@ app.get('/recently-played', async (req, res) => {
     const response = await spotifyApi.getMyRecentlyPlayedTracks();
     const tracks = response.body.items.map(item => {
       return {
-        id: item.track.uri,
+        id: item.track.id,
         name: item.track.name,
         uri: item.track.uri,
         album: {
@@ -427,14 +427,27 @@ app.get('/search/:query', async (req, res) => {
 
 
 // Recommendations endpoint (simplified, adjust based on your needs)
-app.get('/recommendations/:trackId', async (req, res) => {
-  const { trackId } = req.params;
+app.get('/recommendations', async (req, res) => {
+  const { seedTracks, user } = req.query;
   try {
-    const response = await spotifyApi.getRecommendations({ seed_tracks: [trackId] });
+    const response = await spotifyApi.getRecommendations({ 
+      seed_tracks: seedTracks, 
+      min_acousticness: user.buttons[0].userMin, max_acousticness: user.buttons[0].userMax, target_acousticness: user.buttons[0].targetValue,
+      min_danceability: user.buttons[1].userMin, max_danceability: user.buttons[1].userMax, target_danceability: user.buttons[1].targetValue,
+      min_energy: user.buttons[2].userMin, max_energy: user.buttons[2].userMax, target_energy: user.buttons[2].targetValue,
+      min_instrumentalness: user.buttons[3].userMin, max_instrumentalness: user.buttons[3].userMax, target_instrumentalness: user.buttons[3].targetValue,
+      min_liveness: user.buttons[5].userMin, max_liveness: user.buttons[5].userMax, target_liveness: user.buttons[5].targetValue,
+      min_tempo: user.buttons[10].userMin, max_tempo: user.buttons[10].userMax, target_tempo: user.buttons[10].targetValue,
+      min_valence: user.buttons[11].userMin, max_valence: user.buttons[11].userMax, target_valence: user.buttons[11].targetValue,
+      
+    });
+    console.log(response.body.tracks);
     const tracks = response.body.tracks.map(item => ({
       name: item.name,
       id: item.id,
-      album: item.album,
+      album: {
+        albumArt: item.album.images[0].url,
+      },
       artist: item.artists.map(artist => artist.name).join(', '),
     }));
     res.json(tracks);
