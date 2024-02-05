@@ -14,6 +14,7 @@
   position: relative;
   margin-bottom: 1rem;
   z-index: 3;
+  transition: all 0.5s ease;
   &:hover {
     transform: scale(1.04);
     transition: transform 0.3s ease-in;
@@ -87,7 +88,7 @@ button {
   padding: 7px 15px;
   cursor: pointer;
   border: none;
-  border-radius: 20px;
+  border-radius: 25px;
   background-color: #b702ff; /* Button color, adjust as needed */
   color: #fff; /* Button text color, adjust as needed */
   
@@ -97,4 +98,7 @@ button {
     margin-left: 2rem;
     margin-bottom: 1rem;
   }
+
+  
+
 }

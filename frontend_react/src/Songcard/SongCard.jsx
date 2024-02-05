@@ -22,6 +22,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
       const data = response.data;
       if (data.success) {
         console.log(`Playing: ${song.name} by ${song.artist}`);
+        showNotification(`Now playing ${song.name} by ${song.artist}`, 3000);
       } else {
         showNotification(`No active device detected, please play spotify on a device. `, 3000);  
         console.error('Error starting playback:', data.error);
@@ -65,9 +66,12 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
 };
 
 
-  const handleContainerClick = async () => {
-    onSongSelect(song);
-    isSelected = true;
+  const handleContainerClick = async (event) => {
+    if (!event.target.classList.contains('play-button') && !event.target.classList.contains('add-button')) {
+      
+      onSongSelect(song);
+      isSelected = true;
+    }
   };
 
   return (

@@ -1,11 +1,10 @@
 .home-notification {
-  /* z-index to show it on top of other elements if you have other modals. */
   z-index: 100;
   background-color: #b702ff;
   display: flex;
-  border-radius: 10px; /* Adjust the border-radius to make it more or less pill-shaped */
+  border-radius: 10px;
   overflow: hidden;
-  position: fixed; 
+  position: fixed;
   text-align: center;
   color: #ddd;
   max-width: 200px;
@@ -16,4 +15,10 @@
   left: 0;
   margin-left: 1rem;
   margin-bottom: 2rem;
+  transition: opacity 0.5s ease-in-out; /* Add opacity to the transition */
+  opacity: 0; /* Set initial opacity to 0 */
+}
+
+.home-notification.visible {
+  opacity: 1; /* When the 'visible' class is added, set opacity to 1 for the fade-in effect */
 }

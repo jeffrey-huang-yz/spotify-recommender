@@ -22,8 +22,7 @@ const AppWrap = (Component, idName, classNames) => function HOC() {
         <Component selectedPlaylistId={selectedPlaylistId} selectedPlaylistName={selectedPlaylistName}/>
 
         <div className="copyright">
-          <p className="p-text"> @2024 Jeffrey</p>
-          <p className="p-text"> All rights reserved</p>
+          <p className="p-text"> © 2024 JEFFREY HUANG. ALL RIGHTS RESERVED</p>
         </div>
       </div>
 

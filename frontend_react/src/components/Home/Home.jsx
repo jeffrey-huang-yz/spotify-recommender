@@ -18,11 +18,43 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const [seedTracks, setSeedTracks] = useState('');
   const [recommendationResults, setRecommendationResults] = useState([]); 
   const searchRef = useRef(null);
+  const recentlyPlayedRef = useRef(null);
+  const selectedSongsRef = useRef(null); 
+  const recommendationRef = useRef(null);
+  const searchbarRef = useRef(null);
+  const logoutTimeoutRef = useRef(null); // Ref to store the timeout ID
+  const [userImage, setUserImage] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const userResponse = await axios.get('http://localhost:3001/spotifyuser');
+      setUserImage(userResponse.data.image);
+    };
+
+    fetchData();
+  }, [userImage]);
+
+
+  const scrollToRef = (ref) => {
+    ref.current.scrollIntoView({ behavior: 'smooth' });
+  };
+  useEffect(() => {
+    // Set a timeout for 1 hour (60 minutes * 60 seconds * 1000 milliseconds)
+    logoutTimeoutRef.current = setTimeout(() => {
+      window.location.href = 'http://localhost:3001/login'
+      console.log('User has been active for an hour. Redirect to login page.');
+    }, 60 * 60 * 1000);
+
+    // Cleanup: Clear the timeout when the component is unmounted
+    return () => {
+      clearTimeout(logoutTimeoutRef.current);
+    };
+  }, []);
+
 
   const handleSongSelect = (song, isSelected) => {
     // Check if the song is already in the selectedSongs array
     const isSongSelected = selectedSongs.some((selectedSong) => selectedSong.id === song.id);
-  
     // Check if the limit of 5 songs is reached
     const isLimitReached = selectedSongs.length >= 5;
   
@@ -31,13 +63,15 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       setSelectedSongs((prevSelectedSongs) =>
         prevSelectedSongs.filter((selectedSong) => selectedSong.id !== song.id)
       );
+      showNotification(`You have removed ${song.name} by ${song.artist}`, 1500);
       console.log('Song removed:', song);
     } else if (!isSelected && !isSongSelected && !isLimitReached) {
       // If the song is not selected, not in the array, and the limit is not reached, add it
       setSelectedSongs((prevSelectedSongs) => [...prevSelectedSongs, song]);
       console.log('Song added:', song);
+      showNotification(`You have selected ${song.name} by ${song.artist}`, 1500);
     } else if (!isSelected && !isSongSelected && isLimitReached) {
-      // Handle the case where the limit is reached
+      showNotification(`You can only select up to 5 songs.`, 1500);
       console.log('Song limit reached. Cannot add more songs.');
       // You can show a notification or handle it in any way you prefer
     }
@@ -58,7 +92,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
         const response = await axios.get('http://localhost:3001/googleuser/data', { withCredentials: true })
         setUser(response.data);
         setRefreshUserData(false); // Reset the refresh trigger
-
+      
     };
 
     const fetchRecentlyPlayedTracks = async () => {
@@ -128,15 +162,45 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       });
   
       setRecommendationResults(response.data);
+      scrollToRef(recommendationRef)
     } catch (error) {
       console.error('Error fetching recommended tracks:', error);
     }
   };
 
+ 
+
+
+  const handleResetButtonValues = async () => {
+    try {
+      
+      const response = await axios.put(`http://localhost:3001/reset-button-values/${user.userId}`);
+      
+      setRefreshUserData(true); // Set the refresh trigger
+      showNotification( `You have reset the attribute values`, 1500);
+    } catch (error) {
+      console.error('Error fetching recommended tracks:', error);
+    }
+  };
   return (
     <div className='noselect'>
+
+      <nav className="navbar">
+        <ul>
+          <li onClick={() => scrollToRef(searchbarRef)}>Search Bar</li>
+          <li onClick={() => scrollToRef(selectedSongsRef)}>Selected Songs</li>
+          <li onClick={() => scrollToRef(recommendationRef)}>Recommended Tracks</li>
+          <li onClick={() => scrollToRef(searchRef)}>Search Results</li>
+          <li onClick={() => scrollToRef(recentlyPlayedRef)}>Recently Played Tracks</li>
+          
+        </ul>
+      </nav>
+
+      <div className='user-profile'>
+        <img src={userImage} alt='Spotify Icon' className='spotify-icon' />
+      </div>
       {/* Discovery Section */}
-      <div className="home-title">
+      <div className="home-title" ref={searchbarRef}>
         <h1 className='noselect'>
           <span className="home-purple noselect">disk</span>overy
         </h1>
@@ -144,13 +208,13 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
 
       <NotificationBox visible={visible} text={text} />
 
-      <div className='searchbar'>
+      <div className='searchbar' >
         {/* Include the SearchBar component */}
         <SearchBar onSearch={handleSearch} onSearchPerformed={handleSearchPerformed} />
       </div>
       
-      <div className='song-cards-container'>
-        <h2>Selected Songs</h2>
+      <div className='selected-songs-container' ref={selectedSongsRef}>
+       
         <div className='songcards'>
           {selectedSongs.map((selectedSong, index) => (
             <SongCard
@@ -177,8 +241,13 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
         ))}
       </div>
       
-      <div className='reommendation-container'>
+      <div className='recommendation-container' >
+
+        <button className="reset-button" onClick={handleResetButtonValues}>
+          Reset Attribute Values
+        </button>
         <button className="recommendation-button" onClick={handleRecommendation}>Search for recommended songs</button>
+
       </div>
       
       <div className='buttoncontainer'>
@@ -196,10 +265,10 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       )}
       </div>
       
-      {/* Recently Played Tracks Section */}
-      <div className="song-cards-container ">
+      {/* Recommendated Tracks Section */}
+      <div className="song-cards-container " ref={recommendationRef}>
         <div className='recently-played'>
-          <h2>Recently Played Tracks</h2>
+          <h2>Recommended Tracks:</h2>
 
           <div className='songcards'>
           {recommendationResults.map((track, index) => (
@@ -220,7 +289,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       <div className='song-cards-container' ref={searchRef}>
         {/* Display search results if available */}
         <div className="search-results">
-          <h2>Search Results</h2>
+          <h2>Search Results:</h2>
         {searchResults.length > 0 && (
     
             <div className='songcards'>
@@ -241,7 +310,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       </div>
 
       {/* Recently Played Tracks Section */}
-      <div className="song-cards-container ">
+      <div className="song-cards-container " ref={recentlyPlayedRef}>
         <div className='recently-played'>
           <h2>Recently Played Tracks</h2>
 

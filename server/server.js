@@ -147,7 +147,41 @@ app.delete('/users/:userId', async (req, res) => {
   }
 });
 
+app.put('/reset-button-values/:userId', async (req, res) => {
+  const {userId} = req.params;
 
+  const originalButtonValues = [
+    { buttonId: 'acousticness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+    { buttonId: 'danceability', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+    { buttonId: 'energy', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+    { buttonId: 'instrumentalness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+    { buttonId: 'key', max: 11, min: 0, userMax: 11, userMin: 0, targetValue: 5.5 },
+    { buttonId: 'liveness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+    { buttonId: 'loudness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+    { buttonId: 'mode', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+    { buttonId: 'popularity', max: 100, min: 0, userMax: 100, userMin: 0, targetValue: 50 },
+    { buttonId: 'speechiness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+    { buttonId: 'tempo', max: 250, min: 0, userMax: 250, userMin: 0, targetValue: 125 },
+    { buttonId: 'valence', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+  ];
+
+  try {
+    const updatedUser = await User.updateOne(
+      { userId: userId }, 
+      { $set: { buttons: originalButtonValues } },
+      { new: true }
+    );
+
+    if (updatedUser) {
+      res.json(updatedUser);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Error updating user' });
+  }
+});
 
 
 /*
@@ -445,6 +479,7 @@ app.get('/recommendations', async (req, res) => {
     const tracks = response.body.tracks.map(item => ({
       name: item.name,
       id: item.id,
+      uri:item.uri,
       album: {
         albumArt: item.album.images[0].url,
       },

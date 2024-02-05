@@ -1,4 +1,4 @@
-.notification {
+.notification-box {
   /* z-index to show it on top of other elements if you have other modals. */
   z-index: 100;
   background-color: #b702ff;
@@ -14,4 +14,11 @@
   justify-content: center;
   color: #ddd;
   font-weight: 700;
+  opacity: 0; /* Start with opacity set to 0 */
+  transition: opacity 0.5s ease-in-out; /* Use opacity for a fade effect */
+  
+}
+
+.notification-box.visible {
+  opacity: 1; /* When the 'visible' class is added, set opacity to 1 for the fade-in effect */
 }

@@ -44,7 +44,7 @@ const PlaylistSelector = ({ onSelect }) => {
   };
 
   return (
-    <div className={`playlist-selector ${isMenuOpen ? 'open' : ''}`}>
+    <div className={`playlist-selector ${isMenuOpen ? 'open' : ''} noselect` }>
       <h3 className='choose-playlist' onClick={toggleMenu}>{selectedPlaylistName || 'Choose Playlist:'}</h3>
       <ul className='playlist-list'>
         {playlists.map((playlist) => (
