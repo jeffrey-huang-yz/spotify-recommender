@@ -20,7 +20,7 @@ const bodyParser = require('body-parser'); // Add this line
 const { MongoClient } = require('mongodb');
 
 // Connection URI 
-const uri = prevess.env.MONGODB_CONNECT_URI;
+const uri = process.env.MONGODB_CONNECT_URI;
 
 // Create a MongoDB client and connect to the database
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
