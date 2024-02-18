@@ -17,7 +17,7 @@ var UserDetail = new Schema({
 });
 
 async function run() {
-  await mongoose.connect('mongodb://localhost:27017');
+  await mongoose.connect(process.env.MONGODB_CONNECT_URI);
   mongoose.model('User', UserDetail);
 
 }

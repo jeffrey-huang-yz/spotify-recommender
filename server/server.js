@@ -7,8 +7,8 @@ const app = express();
 
 const cors=require("cors");
 app.use(cors({ origin: true, credentials: true }));
-const port = 3001;
 
+const port = process.env.PORT
 /*
 * MongoDB
 */
@@ -20,7 +20,7 @@ const bodyParser = require('body-parser'); // Add this line
 const { MongoClient } = require('mongodb');
 
 // Connection URI 
-const uri = 'mongodb://localhost:27017';
+const uri = MONGODB_CONNECT_URI;
 
 // Create a MongoDB client and connect to the database
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -195,7 +195,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
   clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
   clientSecret: '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',
-  callbackURL: 'http://localhost:3001/auth/google/callback',
+  callbackURL: 'https://diskovery.onrender.com/auth/google/callback',
   accessType: 'offline', 
 }, async (accessToken, refreshToken, profile, done) => {
   // Check if the user already exists in the database
@@ -267,14 +267,14 @@ accessType: 'offline', approvalPrompt: 'force' }));
   const oAuth2Client = new OAuth2Client({
     clientId: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
     clientSecret: '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',
-    redirectUri: 'http://localhost:3001/auth/google/callback',
+    redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
   });
   
   app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     // Successful authentication, redirect to the login page
-    res.redirect('http://localhost:3000/login');
+    res.redirect('https://diskovery-ljvy.onrender.com/login');
   }
 );
 
@@ -326,11 +326,11 @@ app.get('/googleuser/data', async (req, res) => {
 const spotifyApi = new SpotifyWebApi({
   clientId: 'fb7620c28e204226b196176a4f268215',
   clientSecret: '6b3a14d1ce9241e49805762910f8c0fd',
-  redirectUri: 'http://localhost:3000/callback',
+  redirectUri: 'https://diskovery-ljvy.onrender.com/callback',
 });
 
 app.use(cors({
-  origin: 'http://localhost:3000',  // Replace with your React app's origin
+  origin: 'https://diskovery-ljvy.onrender.com', 
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,  // Enable credentials (cookies, authorization headers, etc.)
 }));
@@ -363,7 +363,7 @@ app.get('/callback', async (req, res) => {
     spotifyApi.setRefreshToken(refreshToken);
 
     // Redirect to the front-end with tokens (in a production environment, handle tokens securely)
-    res.redirect(`http://localhost:3000/?accessToken=${accessToken}&refreshToken=${refreshToken}`);
+    res.redirect(`https://diskovery-ljvy.onrender.com/?accessToken=${accessToken}&refreshToken=${refreshToken}`);
   } catch (error) {
     console.error('Error getting access token:', error);
     res.status(500).send('Error getting access token');
