@@ -27,7 +27,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userResponse = await axios.get('http://localhost:3001/spotifyuser');
+      const userResponse = await axios.get('https://diskovery.onrender.com/spotifyuser');
       setUserImage(userResponse.data.image);
     };
 
@@ -41,7 +41,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   useEffect(() => {
     // Set a timeout for 1 hour (60 minutes * 60 seconds * 1000 milliseconds)
     logoutTimeoutRef.current = setTimeout(() => {
-      window.location.href = 'http://localhost:3001/login'
+      window.location.href = 'https://diskovery.onrender.com/login'
       console.log('User has been active for an hour. Redirect to login page.');
     }, 60 * 60 * 1000);
 
@@ -89,7 +89,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-        const response = await axios.get('http://localhost:3001/googleuser/data', { withCredentials: true })
+        const response = await axios.get('https://diskovery.onrender.com/googleuser/data', { withCredentials: true })
         setUser(response.data);
         setRefreshUserData(false); // Reset the refresh trigger
       
@@ -97,7 +97,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
 
     const fetchRecentlyPlayedTracks = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/recently-played');
+        const response = await axios.get('https://diskovery.onrender.com/recently-played');
         setRecentlyPlayedTracks(response.data);
       } catch (error) {
         console.error('Error fetching recently played tracks:', error);
@@ -154,7 +154,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const handleRecommendation = async () => {
     try {
       
-      const response = await axios.get('http://localhost:3001/recommendations', {
+      const response = await axios.get('https://diskovery.onrender.com/recommendations', {
         params: {
           seedTracks: seedTracks,
           user: user,
@@ -174,7 +174,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const handleResetButtonValues = async () => {
     try {
       
-      const response = await axios.put(`http://localhost:3001/reset-button-values/${user.userId}`);
+      const response = await axios.put(`https://diskovery.onrender.com/reset-button-values/${user.userId}`);
       
       setRefreshUserData(true); // Set the refresh trigger
       showNotification( `You have reset the attribute values`, 1500);

@@ -12,8 +12,8 @@ const PlaylistSelector = ({ onSelect }) => {
     // Fetch user's playlists from your server or Spotify API
     const fetchPlaylists = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/user-playlists');
-        const userResponse = await axios.get('http://localhost:3001/spotifyuser');
+        const response = await axios.get('https://diskovery.onrender.com/user-playlists');
+        const userResponse = await axios.get('https://diskovery.onrender.com/spotifyuser');
         
         const userOwnedPlaylists = response.data.filter((playlist) => {
           return playlist.owner.id === userResponse.data.id;

@@ -8,7 +8,7 @@ const SearchResults = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/search/${query}`);
+      const response = await axios.get(`https://diskovery.onrender.com/search/${query}`);
       setSearchResults(response.data);
     } catch (error) {
       console.error('Error searching tracks:', error);

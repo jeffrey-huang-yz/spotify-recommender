@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 const GoogleAuth = () => {
     useEffect(() => {
-        window.location.href = 'http://localhost:3001/auth/google';
+        window.location.href = 'https://diskovery.onrender.com/auth/google';
     }, []);
 
     return <div>Redirecting to Google authentication...</div>;

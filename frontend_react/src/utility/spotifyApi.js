@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const exchangeCodeForAccessToken = async (code) => {
   try {
-    const response = await axios.post('http://localhost:3001/token', { code });
+    const response = await axios.post('https://diskovery.onrender.com/token', { code });
     return response.data.access_token;
   } catch (error) {
     console.error('Error exchanging code for access token:', error);

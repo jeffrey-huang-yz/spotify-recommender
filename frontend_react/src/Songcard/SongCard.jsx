@@ -15,7 +15,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
   const handlePlay = async () => {
     try {
       // Call the /play routewith the selectedPlaylistId
-      const response = await axios.put('http://localhost:3001/play', {
+      const response = await axios.put('https://diskovery.onrender.com/play', {
         trackUri: song.uri
       });
 
@@ -34,7 +34,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
   const handleAddToPlaylist = async () => {
   try {
     // Check if the song is already in the playlist
-    const playlistDetailsResponse = await axios.get(`http://localhost:3001/playlist-details/${selectedPlaylistId}`);
+    const playlistDetailsResponse = await axios.get(`https://diskovery.onrender.com/playlist-details/${selectedPlaylistId}`);
     const playlistTracks = playlistDetailsResponse.data;
     const isSongInPlaylist = playlistTracks.some(items => items.track.id === song.id);
 
@@ -46,7 +46,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
       // You can show a notification or handle it in any way you prefer
     } else {
       
-        const response = await axios.post('http://localhost:3001/add-tracks-to-playlist', {
+        const response = await axios.post('https://diskovery.onrender.com/add-tracks-to-playlist', {
           playlist_id: selectedPlaylistId,
           uris: song.uri
         }, {
