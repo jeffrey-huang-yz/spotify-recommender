@@ -45,7 +45,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       console.log('User has been active for an hour. Redirect to login page.');
     }, 60 * 60 * 1000);
 
-    // Cleanup: Clear the timeout when the component is unmounted
+    
     return () => {
       clearTimeout(logoutTimeoutRef.current);
     };
@@ -73,7 +73,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
     } else if (!isSelected && !isSongSelected && isLimitReached) {
       showNotification(`You can only select up to 5 songs.`, 1500);
       console.log('Song limit reached. Cannot add more songs.');
-      // You can show a notification or handle it in any way you prefer
+      
     }
   };
   
