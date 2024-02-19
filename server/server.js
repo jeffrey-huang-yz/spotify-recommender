@@ -289,7 +289,7 @@ app.get(
     approvalPrompt: 'force'
   })
 );
-router.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
+app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
   try {
     // Check if the user is authenticated
     if (!req.isAuthenticated()) {
