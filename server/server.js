@@ -297,7 +297,8 @@ const isAuthenticated = (req, res, next) => {
   res.status(401).json({ error: 'Not authenticated' });
 };
 
-app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), isAuthenticated, async (req, res) => {
+app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), isAuthenticated, async (req, res) => { 
+  res.header("Access-Control-Allow-Origin", "*");
   try {
     // If the execution reaches this point, it means the user is authenticated
     const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
