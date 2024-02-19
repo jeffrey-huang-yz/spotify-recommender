@@ -8,14 +8,16 @@ import GoogleAuth from './components/GoogleAuth';
 
 const App = () => {
   return (
-
+    <HashRouter>
       <Routes>
-        <Route path="/" element={<GoogleAuth />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Home" element={<Home />} />
-        <Route path="/callback" element={<Callback />} /> 
+        <Route path="/" component={<GoogleAuth />} exact />
+        <Route path="/Login" component={<Login />} exact/>
+        <Route path="/Home" component={<Home />} exact/>
+        <Route path="/callback" component={<Callback />} exact/> 
   
       </Routes>
+    </HashRouter>
+      
 
   );
 };
