@@ -289,7 +289,7 @@ app.get(
   })
 );
 
-router.get('/googleuser/data', 
+app.get('/googleuser/data', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   async (req, res) => {
     try {
