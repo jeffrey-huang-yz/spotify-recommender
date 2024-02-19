@@ -289,35 +289,20 @@ app.get(
     approvalPrompt: 'force'
   })
 );
-app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
-  try {
-    // Check if the user is authenticated
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
+app.get('/googleuser/data', async (req, res) => {
+ 
+  passport.authenticate('google', { failureRedirect: '/' });
 
-    // Retrieve userId from request parameters
-    const userId = req.user.userId;
+  // If the user is authenticated, retrieve user data from the database
+  const userId = req.user.userId; 
+  console.log(userId);
+  
+  const user = await User.findOne({userId});
+  console.log(user);                    
+  res.json(user);
+  
 
-    try {
-      // Find user in the database using userId
-      const user = await User.findOne({ userId });
-
-      if (user) {
-        console.log(user);
-        res.json(user); // Return user details
-      } else {
-        res.status(404).json({ error: 'User not found' });
-      }
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      res.status(500).json({ error: 'Error fetching user' });
-    }
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-    res.status(500).json({ error: 'Error checking authentication' });
-  }
-});
+})
 
 
 
