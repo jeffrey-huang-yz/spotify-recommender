@@ -294,14 +294,19 @@ app.get('/googleuser/data', async (req, res) => {
  
     passport.authenticate('google', { failureRedirect: '/' });
 
-    // If the user is authenticated, retrieve user data from the database
-    const userId = req.user.userId; 
-    console.log(userId);
+      // If the user is authenticated, retrieve user data from the database
+      const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
+        console.log(userId);
     
-    const user = await User.findOne({userId});
-    console.log(user);                    
-    res.json(user);
-    
+        const user = await User.findOne({ userId: userId });
+        
+        if (user) {
+          console.log(user);                    
+          res.json(user);
+        } else {
+          res.status(404).json({ error: 'User not found' });
+        }
+
   
 })
 
