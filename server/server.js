@@ -289,7 +289,9 @@ app.get(
   })
 );
 
-app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
+app.get('/googleuser/data', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+'https://www.googleapis.com/auth/userinfo.email'],
+accessType: 'offline', approvalPrompt: 'force' }), async (req, res) => {
   try {
     // Now the authentication process will be executed before reaching this point
     const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
