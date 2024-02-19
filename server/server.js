@@ -277,11 +277,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   // Protected route to fetch user data
   app.get('/googleuser/data', (req, res) => {
-    if (req.isAuthenticated()) {
-      res.json(req.user);
-    } else {
-      res.status(401).json({ error: 'Not authenticated' });
-    }
+    res.json(req.user);
   });
 
 /**
