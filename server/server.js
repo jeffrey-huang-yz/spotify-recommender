@@ -195,7 +195,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
   clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
   clientSecret: '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',
-  callbackURL: 'https://diskovery.onrender.com/auth/google/callback',
+  callbackURL: 'http://localhost:3001/auth/google/callback',
   accessType: 'offline', 
 }, async (accessToken, refreshToken, profile, done) => {
   // Check if the user already exists in the database
@@ -289,41 +289,30 @@ app.get(
     approvalPrompt: 'force'
   })
 );
-app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
-  try {
-    // Check if the user is authenticated
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
 
-    // Retrieve userId from request parameters
-    const userId = req.user.userId;
+app.get('/googleuser/data', async (req, res) => {
+ 
+    passport.authenticate('google', { failureRedirect: '/' });
+    if (req.isAuthenticated()) {
+      // If the user is authenticated, retrieve user data from the database
+      const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
 
-    try {
-      // Find user in the database using userId
-      const user = await User.findOne({ userId });
+    
+        const user = await User.findOne({ userId });
 
-      if (user) {
-        console.log(user);
-        return {
-          id: user._id,
-          email: user.email,
-          userId: user.userId,
-          buttons: user.buttons,
-        };
-      }
+        if (user) {
+          console.log(user);
+          res.json(user);
+        } else {
+          res.status(404).json({ error: 'User not found' });
+        }
      
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      res.status(500).json({ error: 'Error fetching user' });
+    } else {
+      // The user is not authenticated, send an error response
+      res.status(401).json({ error: 'Not authenticated' });
     }
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-    res.status(500).json({ error: 'Error checking authentication' });
-  }
-});
-
-
+  
+})
 
 /**
  * SpotifyWebApi
