@@ -289,32 +289,33 @@ app.get(
   })
 );
 
-app.get('/googleuser/data', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-'https://www.googleapis.com/auth/userinfo.email'],
-accessType: 'offline', approvalPrompt: 'force' }), async (req, res) => {
-  try {
-    // Now the authentication process will be executed before reaching this point
-    const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
-    console.log(req.user);
-
+router.get('/googleuser/data', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  async (req, res) => {
     try {
-      const user = await User.findOne({ userId });
+      // Now the authentication process will be executed before reaching this point
+      const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
+      console.log(req.user);
 
-      if (user) {
-        console.log(user);
-        res.json(user);
-      } else {
-        res.status(404).json({ error: 'User not found' });
+      try {
+        const user = await User.findOne({ userId });
+
+        if (user) {
+          console.log(user);
+          res.json(user);
+        } else {
+          res.status(404).json({ error: 'User not found' });
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ error: 'Error fetching user' });
       }
     } catch (error) {
-      console.error('Error fetching user:', error);
-      res.status(500).json({ error: 'Error fetching user' });
+      console.error('Error checking authentication:', error);
+      res.status(500).json({ error: 'Error checking authentication' });
     }
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-    res.status(500).json({ error: 'Error checking authentication' });
   }
-});
+);
 
 
 
