@@ -305,10 +305,14 @@ router.get('/googleuser/data', passport.authenticate('google', { failureRedirect
 
       if (user) {
         console.log(user);
-        res.json(user); // Return user details
-      } else {
-        res.status(404).json({ error: 'User not found' });
+        return {
+          id: user._id,
+          email: user.email,
+          userId: user.userId,
+          buttons: user.buttons,
+        };
       }
+     
     } catch (error) {
       console.error('Error fetching user:', error);
       res.status(500).json({ error: 'Error fetching user' });
