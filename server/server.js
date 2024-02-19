@@ -195,7 +195,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
   clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
   clientSecret: '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',
-  callbackURL: 'http://localhost:3001/auth/google/callback',
+  callbackURL: 'https://diskovery.onrender.com/auth/google/callback',
   accessType: 'offline', 
 }, async (accessToken, refreshToken, profile, done) => {
   // Check if the user already exists in the database
