@@ -307,7 +307,7 @@ app.get('/googleuser/data', async (req, res) => {
           res.status(404).json({ error: 'User not found' });
         }
       } catch (error) {
-        console.error('Error fetching user:', error);
+        console.error('Error fetching user:', error.response.data);
         res.status(500).json({ error: 'Error fetching user' });
       }
    
