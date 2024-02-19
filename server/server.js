@@ -290,7 +290,7 @@ app.get(
 );
 
 app.get('/googleuser/data', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/login', accessType: 'offline', approvalPrompt: 'force' }),
   async (req, res) => {
     try {
       // Now the authentication process will be executed before reaching this point
