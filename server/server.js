@@ -188,7 +188,7 @@ app.put('/reset-button-values/:userId', async (req, res) => {
 * Google OAuth
 */
 
-app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
+app.use(session({ secret: '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', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -293,7 +293,7 @@ app.get(
 app.get('/googleuser/data', async (req, res) => {
   try {
     passport.authenticate('google', { failureRedirect: '/' });
-    if (req.isAuthenticated()) {
+
       // If the user is authenticated, retrieve user data from the database
       const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
 
@@ -310,10 +310,8 @@ app.get('/googleuser/data', async (req, res) => {
         console.error('Error fetching user:', error);
         res.status(500).json({ error: 'Error fetching user' });
       }
-    } else {
-      // The user is not authenticated, send an error response
-      res.status(401).json({ error: 'Not authenticated' });
-    }
+
+    
   } catch (error) {
     console.error('Error checking authentication:', error);
     res.status(500).json({ error: 'Error checking authentication' });
