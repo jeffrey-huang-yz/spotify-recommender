@@ -290,36 +290,17 @@ app.get(
   })
 );
 
-const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(401).json({ error: 'Not authenticated' });
-};
 
-app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), isAuthenticated, async (req, res) => { 
-  res.header("Access-Control-Allow-Origin", "*");
-  try {
-    // If the execution reaches this point, it means the user is authenticated
-    const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
 
-    try {
-      const user = await User.findOne({ userId });
+app.get('/google/auth', passport.authenticate('google', {
+  scope: ['profile', 'email']
+}));
 
-      if (user) {
-        console.log(user);
-        res.json(user);
-      } else {
-        res.status(404).json({ error: 'User not found' });
-      }
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      res.status(500).json({ error: 'Error fetching user' });
-    }
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-    res.status(500).json({ error: 'Error checking authentication' });
-  }
+app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/login' }), async (req, res) => {
+  // Authentication successful, return user data
+  const userId = req.user.userId;
+  const user = await User.findOne({ userId });
+  res.json(user); // Assuming req.user contains the user data
 });
 
 
