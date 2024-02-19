@@ -89,7 +89,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-        const response = await axios.get('https://diskovery.onrender.com/googleuser/data', { withCredentials: true, headers:{"Content-Type" : "application/json"} } )
+        const response = await axios.get('https://diskovery.onrender.com/googleuser/data', { withCredentials: true });
         setUser(response.data);
         setRefreshUserData(false); // Reset the refresh trigger
       
