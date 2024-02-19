@@ -179,7 +179,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       setRefreshUserData(true); // Set the refresh trigger
       showNotification( `You have reset the attribute values`, 1500);
     } catch (error) {
-      console.error('Error fetching recommended tracks:', error);
+      console.error('Error resetting attribute values:', error);
     }
   };
   return (

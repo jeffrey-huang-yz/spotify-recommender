@@ -264,7 +264,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
   const { OAuth2Client } = require('google-auth-library');
   const google = require('googleapis').google;
   
-  const oAuth2Client = new OAuth2Client({
+  const OAuth2Client = new OAuth2Client({
     clientId: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
     clientSecret: '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',
     redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
@@ -319,6 +319,8 @@ app.get('/googleuser/data', async (req, res) => {
     res.status(500).json({ error: 'Error checking authentication' });
   }
 });
+
+
 /**
  * SpotifyWebApi
 */
