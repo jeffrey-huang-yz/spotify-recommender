@@ -8,7 +8,7 @@ import GoogleAuth from './components/GoogleAuth';
 
 const App = () => {
   return (
-    <Router>
+
       <Routes>
         <Route path="/" element={<GoogleAuth />} />
         <Route path="/Login" element={<Login />} />
@@ -16,7 +16,7 @@ const App = () => {
         <Route path="/callback" element={<Callback />} /> 
   
       </Routes>
-    </Router>
+
   );
 };
 
