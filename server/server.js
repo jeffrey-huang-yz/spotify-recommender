@@ -289,24 +289,37 @@ app.get(
     approvalPrompt: 'force'
   })
 );
+router.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
+  try {
+    // Check if the user is authenticated
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
 
-app.get('/googleuser/data', async (req, res) => {
- 
-    passport.authenticate('google', { failureRedirect: '/' });
-      // If the user is authenticated, retrieve user data from the database
-      const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
-        console.log(userId);
-    
-        const user = await User.findOne({ userId: userId });
-        
-        if (user) {
-          console.log(user);                    
-          res.json(user);
-        } else {
-          res.status(404).json({ error: 'User not found' });
-        }
-  
-})
+    // Retrieve userId from request parameters
+    const userId = req.user.userId;
+
+    try {
+      // Find user in the database using userId
+      const user = await User.findOne({ userId });
+
+      if (user) {
+        console.log(user);
+        res.json(user); // Return user details
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      res.status(500).json({ error: 'Error fetching user' });
+    }
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+    res.status(500).json({ error: 'Error checking authentication' });
+  }
+});
+
+
 
 /**
  * SpotifyWebApi
