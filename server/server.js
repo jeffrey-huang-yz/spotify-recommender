@@ -276,12 +276,14 @@ accessType: 'offline', approvalPrompt: 'force' }));
   });
   
   app.get('/googleuser/data', async (req, res) => {
- 
+    if (req.isAuthenticated()) {
       const userId = req.user.userId;
       const user = await User.findOne({ userId });
       console.log(user);
         res.json(user); // Return user details
-  
+    } else {
+      res.status(401).json({ error: 'Not authenticated' });
+    }
   });
 
 /**
