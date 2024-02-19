@@ -11,8 +11,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" component={<GoogleAuth />} exact />
-        <Route path="/Login" component={<Login />} exact/>
-        <Route path="/Home" component={<Home />} exact/>
+        <Route path="/login" component={<Login />} exact/>
+        <Route path="/home" component={<Home />} exact/>
         <Route path="/callback" component={<Callback />} exact/> 
   
       </Routes>
