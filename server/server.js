@@ -189,13 +189,14 @@ app.put('/reset-button-values/:userId', async (req, res) => {
 */
 
 app.use(session({ secret: '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', resave: true, saveUninitialized: true }));
+app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new GoogleStrategy({
   clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
   clientSecret: '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',
-  callbackURL: 'https://diskovery.onrender.com/auth/google/callback',
+  callbackURL: 'https://diskovery-ljvy.onrender.com/auth/google/callback',
   accessType: 'offline', 
 }, async (accessToken, refreshToken, profile, done) => {
   // Check if the user already exists in the database
@@ -239,6 +240,7 @@ passport.use(new GoogleStrategy({
       console.error('Error creating user and buttons:', error);
       return done(error);
     }
+  
 }));
 
 
@@ -266,14 +268,14 @@ accessType: 'offline', approvalPrompt: 'force' }));
   const oAuth2Client = new OAuth2Client({
     clientId: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
     clientSecret: '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',
-    redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
+    redirectUri: 'https://diskovery-ljvy.onrender.com/auth/google/callback',
   });
   
   app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     // Successful authentication, redirect to the login page
-    res.redirect('https://diskovery-ljvy.onrender.com/login');
+    res.redirect('https://diskovery.onrender.com/login');
   }
 );
 
@@ -289,13 +291,12 @@ app.get(
   })
 );
 
-app.get('/googleuser/data', 
-  passport.authenticate('google', { failureRedirect: '/login', accessType: 'offline', approvalPrompt: 'force' }),
-  async (req, res) => {
-    try {
-      // Now the authentication process will be executed before reaching this point
+app.get('/googleuser/data', async (req, res) => {
+  try {
+    passport.authenticate('google', { failureRedirect: '/' });
+    if (req.isAuthenticated()) {
+      // If the user is authenticated, retrieve user data from the database
       const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
-      console.log(req.user);
 
       try {
         const user = await User.findOne({ userId });
@@ -310,13 +311,15 @@ app.get('/googleuser/data',
         console.error('Error fetching user:', error);
         res.status(500).json({ error: 'Error fetching user' });
       }
-    } catch (error) {
-      console.error('Error checking authentication:', error);
-      res.status(500).json({ error: 'Error checking authentication' });
+    } else {
+      // The user is not authenticated, send an error response
+      res.status(401).json({ error: 'Not authenticated' });
     }
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+    res.status(500).json({ error: 'Error checking authentication' });
   }
-);
-
+});
 
 
 /**
