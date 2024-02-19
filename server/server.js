@@ -272,7 +272,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
     // Redirect to your frontend application with user data in query parameters
-    res.redirect(`https://your_frontend_app.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
+    res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
   });
   
   // Protected route to fetch user data
