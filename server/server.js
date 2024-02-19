@@ -294,14 +294,14 @@ app.get('/googleuser/data', async (req, res) => {
   try {
     passport.authenticate('google', { failureRedirect: '/' });
       // If the user is authenticated, retrieve user data from the database
-      const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
+      const userId = req.user.userId; 
 
       try {
         const user = await User.findOne({ userId });
 
         if (user) {
           console.log(user);
-          res.setHeader('Access-Control-Allow-Origin', 'https://diskovery-ljvy.onrender.com'); // Replace 'https://example.com' with your allowed origin
+       
           res.json(user);
         } else {
           res.status(404).json({ error: 'User not found' });
