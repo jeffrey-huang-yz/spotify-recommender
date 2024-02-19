@@ -296,7 +296,7 @@ app.get('/googleuser/data', async (req, res) => {
     if (req.isAuthenticated()) {
       // If the user is authenticated, retrieve user data from the database
       const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
-
+        console.log(userId);
     
         const user = await User.findOne({ userId: userId });
         
