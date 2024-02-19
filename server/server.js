@@ -196,7 +196,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
   clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
   clientSecret: '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',
-  callbackURL: 'https://diskovery-ljvy.onrender.com/auth/google/callback',
+  callbackURL: 'https://diskovery.onrender.com/auth/google/callback',
   accessType: 'offline', 
 }, async (accessToken, refreshToken, profile, done) => {
   // Check if the user already exists in the database
@@ -268,14 +268,14 @@ accessType: 'offline', approvalPrompt: 'force' }));
   const oAuth2Client = new OAuth2Client({
     clientId: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
     clientSecret: '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',
-    redirectUri: 'https://diskovery-ljvy.onrender.com/auth/google/callback',
+    redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
   });
   
   app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     // Successful authentication, redirect to the login page
-    res.redirect('https://diskovery.onrender.com/login');
+    res.redirect('https://diskovery-ljvy.onrender.com/login');
   }
 );
 
