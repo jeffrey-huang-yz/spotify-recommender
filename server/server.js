@@ -298,19 +298,15 @@ app.get('/googleuser/data', async (req, res) => {
       const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
 
     
-        const user = await User.findOne({ userId });
-
+        const user = await User.findOne({ userId: userId });
+        
         if (user) {
-          console.log(user);
+          console.log(user);                    
           res.json(user);
         } else {
           res.status(404).json({ error: 'User not found' });
         }
-     
-    } else {
-      // The user is not authenticated, send an error response
-      res.status(401).json({ error: 'Not authenticated' });
-    }
+      }
   
 })
 
