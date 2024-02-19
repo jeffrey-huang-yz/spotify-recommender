@@ -289,7 +289,10 @@ app.get(
     approvalPrompt: 'force'
   })
 );
-app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
+app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/', scope: [
+  'https://www.googleapis.com/auth/userinfo.profile',
+  'https://www.googleapis.com/auth/userinfo.email'
+],}), async (req, res) => {
   try {
     // Check if the user is authenticated
     if (!req.isAuthenticated()) {
