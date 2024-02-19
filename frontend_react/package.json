@@ -1,5 +1,6 @@
 {
   "name": "frontend_react",
+  "homepage": "https://diskovery-ljvy.onrender.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
