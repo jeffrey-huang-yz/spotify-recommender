@@ -10,13 +10,7 @@ root.render(
   <React.StrictMode>
     <HashRouter>
     <App />
-    <Routes>
-        <Route path="/" element={<GoogleAuth />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Home" element={<Home />} />
-        <Route path="/callback" element={<Callback />} /> 
-  
-      </Routes>
+    
     </HashRouter>
   </React.StrictMode>
   
