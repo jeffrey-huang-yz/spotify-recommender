@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 import Callback from './components/Callback/Callback'; 
@@ -10,11 +10,10 @@ const App = () => {
   return (
     
       <Routes>
-        <Route path="/" component={GoogleAuth} exact />
-        <Route path="/login" component={Login} exact/>
-        <Route path="/home" component={Home} exact/>
-        <Route path="/callback" component={Callback} exact/> 
-  
+        <Route path="/" element={<GoogleAuth />} exact />
+        <Route path="/login" element={<Login />} exact />
+        <Route path="/home" element={<Home />} exact />
+        <Route path="/callback" element={<Callback />} exact /> 
       </Routes>
  
       
