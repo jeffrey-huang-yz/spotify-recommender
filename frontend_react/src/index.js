@@ -7,10 +7,19 @@ import { HashRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <HashRouter>
+  <React.StrictMode>
+    <HashRouter>
     <App />
-    <Login />
-  </HashRouter>
+    <Routes>
+        <Route path="/" element={<GoogleAuth />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Home" element={<Home />} />
+        <Route path="/callback" element={<Callback />} /> 
+  
+      </Routes>
+    </HashRouter>
+  </React.StrictMode>
+  
 );
 
 // If you want to start measuring performance in your app, pass a function
