@@ -6,7 +6,7 @@ const User = require('./src/User');
 const app = express();
 
 const cors=require("cors");
-app.use(cors({ origin: 'https://diskovery-ljvy.onrender.com', credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 
 const port = process.env.PORT
 /*
