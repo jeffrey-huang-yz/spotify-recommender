@@ -275,9 +275,15 @@ accessType: 'offline', approvalPrompt: 'force' }));
     res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
   });
   
-  // Protected route to fetch user data
-  app.get('/googleuser/data', (req, res) => {
-    res.json(req.user);
+  app.get('/googleuser/data', async (req, res) => {
+    if (req.isAuthenticated()) {
+      const userId = req.user.userId;
+      const user = await User.findOne({ userId });
+      console.log(user);
+        res.json(user); // Return user details
+    } else {
+      res.status(401).json({ error: 'Not authenticated' });
+    }
   });
 
 /**
