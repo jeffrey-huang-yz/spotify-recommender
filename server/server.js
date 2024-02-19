@@ -270,60 +270,19 @@ accessType: 'offline', approvalPrompt: 'force' }));
     redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
   });
   
-  app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
-    // Successful authentication, redirect to the login page
-    res.redirect('https://diskovery-ljvy.onrender.com/login');
-  }
-);
-
-app.get(
-  '/googleuser',
-  passport.authenticate('google', {
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email'
-    ],
-    accessType: 'offline',
-    approvalPrompt: 'force'
-  })
-);
-app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/', scope: [
-  'https://www.googleapis.com/auth/userinfo.profile',
-  'https://www.googleapis.com/auth/userinfo.email'
-], accessType: 'offline',
-approvalPrompt: 'force'}), async (req, res) => {
-  try {
-    // Check if the user is authenticated
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+  app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+    // Redirect to your frontend application with user data in query parameters
+    res.redirect(`https://your_frontend_app.com/?userId=${req.user.userId}&email=${req.user.email}`);
+  });
+  
+  // Protected route to fetch user data
+  app.get('/googleuser/data', (req, res) => {
+    if (req.isAuthenticated()) {
+      res.json(req.user);
+    } else {
+      res.status(401).json({ error: 'Not authenticated' });
     }
-
-    // Retrieve userId from request parameters
-    const userId = req.user.userId;
-
-    try {
-      // Find user in the database using userId
-      const user = await User.findOne({ userId });
-
-      if (user) {
-        console.log(user);
-        res.json(user); // Return user details
-      } else {
-        res.status(404).json({ error: 'User not found' });
-      }
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      res.status(500).json({ error: 'Error fetching user' });
-    }
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-    res.status(500).json({ error: 'Error checking authentication' });
-  }
-});
-
-
+  });
 
 /**
  * SpotifyWebApi
