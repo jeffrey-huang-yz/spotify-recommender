@@ -291,12 +291,13 @@ app.get(
 );
 
 app.get('/googleuser/data', async (req, res) => {
+
   try {
     passport.authenticate('google', { failureRedirect: '/' });
 
       // If the user is authenticated, retrieve user data from the database
       const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
-
+      console.log(userId);
       try {
         const user = await User.findOne({ userId });
 
