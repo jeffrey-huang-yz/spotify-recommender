@@ -290,29 +290,30 @@ app.get(
   })
 );
 
-app.get('/googleuser/data', async (req, res) => {
+const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ error: 'Not authenticated' });
+};
+
+app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), isAuthenticated, async (req, res) => {
   try {
-    passport.authenticate('google', { failureRedirect: '/' });
-    if (req.isAuthenticated()) {
-      // If the user is authenticated, retrieve user data from the database
-      const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
+    // If the execution reaches this point, it means the user is authenticated
+    const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
 
-      try {
-        const user = await User.findOne({ userId });
+    try {
+      const user = await User.findOne({ userId });
 
-        if (user) {
-          console.log(user);
-          res.json(user);
-        } else {
-          res.status(404).json({ error: 'User not found' });
-        }
-      } catch (error) {
-        console.error('Error fetching user:', error);
-        res.status(500).json({ error: 'Error fetching user' });
+      if (user) {
+        console.log(user);
+        res.json(user);
+      } else {
+        res.status(404).json({ error: 'User not found' });
       }
-    } else {
-      // The user is not authenticated, send an error response
-      res.status(401).json({ error: 'Not authenticated' });
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      res.status(500).json({ error: 'Error fetching user' });
     }
   } catch (error) {
     console.error('Error checking authentication:', error);
