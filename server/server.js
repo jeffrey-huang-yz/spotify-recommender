@@ -189,7 +189,6 @@ app.put('/reset-button-values/:userId', async (req, res) => {
 */
 
 app.use(session({ secret: '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', resave: true, saveUninitialized: true }));
-app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -291,7 +290,9 @@ app.get(
   })
 );
 
-app.get('/googleuser/data', async (req, res) => {
+app.get('/googleuser/data', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+'https://www.googleapis.com/auth/userinfo.email'],
+accessType: 'offline', approvalPrompt: 'force' }), async (req, res) => {
   try {
     passport.authenticate('google', { failureRedirect: '/' });
     if (req.isAuthenticated()) {
