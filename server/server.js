@@ -239,7 +239,6 @@ passport.use(new GoogleStrategy({
       console.error('Error creating user and buttons:', error);
       return done(error);
     }
-  
 }));
 
 
@@ -290,36 +289,31 @@ app.get(
   })
 );
 
-app.get('/googleuser/data', async (req, res) => {
-
+app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
   try {
-    passport.authenticate('google', { failureRedirect: '/' });
+    // Now the authentication process will be executed before reaching this point
+    const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
+    console.log(req.user);
 
-      // If the user is authenticated, retrieve user data from the database
-      const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
-      console.log(req.user);
-      console.log(req)
+    try {
+      const user = await User.findOne({ userId });
 
-      try {
-        const user = await User.findOne({ userId });
-
-        if (user) {
-          console.log(user);
-          res.json(user);
-        } else {
-          res.status(404).json({ error: 'User not found' });
-        }
-      } catch (error) {
-        console.error('Error fetching user:', error);
-        res.status(500).json({ error: 'Error fetching user' });
+      if (user) {
+        console.log(user);
+        res.json(user);
+      } else {
+        res.status(404).json({ error: 'User not found' });
       }
-
-    
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      res.status(500).json({ error: 'Error fetching user' });
+    }
   } catch (error) {
     console.error('Error checking authentication:', error);
     res.status(500).json({ error: 'Error checking authentication' });
   }
 });
+
 
 
 /**
