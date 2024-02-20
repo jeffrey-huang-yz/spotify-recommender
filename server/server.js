@@ -281,9 +281,9 @@ passport.serializeUser((user, done) => {
   done(null, user.userId);
 });
 
-passport.deserializeUser(async (user, done) => {
+passport.deserializeUser(async (id, done) => {
   try {
-    const user = User.findOne({ userId: user.userId });
+    const user = User.findOne({ _id: id });
     done(null, user);
   } catch (error) {
     done(error, null);
