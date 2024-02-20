@@ -296,11 +296,13 @@ passport.deserializeUser((user, done) => {
     redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
   });
   
-  app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res, next) => {
+  app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }, { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+  'https://www.googleapis.com/auth/userinfo.email'], session: true,
+  accessType: 'offline', approvalPrompt: 'force' }),), (req, res, next) => {
     // Redirect to your frontend application with user data in query parameters
     res.redirect('https://diskovery-ljvy.onrender.com/login');
 
-  });
+  };
 
   app.get(
     '/googleuser',
