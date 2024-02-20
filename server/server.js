@@ -313,7 +313,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
      
         console.log(userId);
         try {
-          const user = await User.findOne({ userId: profile.id });
+          const user = await User.findOne({ userId: userId });
   
           if (user) {
             console.log(user);
