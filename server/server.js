@@ -10,17 +10,16 @@ const bodyParser = require('body-parser');
 const cors = require("cors");
 const MongoStore = require('connect-mongo');
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: '*', credentials: true, allowedHeaders: "Content-Type, Authorization", }));
 app.use(cookieParser());
-app.use(bodyParser());
+app.use(bodyParser.json());
 app.use(session({
   store: new MongoStore({ 
     mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
   }),
-  proxy : true,
   secret: 'your-secret-key',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   cookie: {
     httpOnly: false,
     secure: false,
@@ -56,8 +55,8 @@ app.use(cors({
   origin: 'https://diskovery-ljvy.onrender.com', 
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,  // Enable credentials (cookies, authorization headers, etc.)
+  allowedHeaders: "Content-Type, Authorization",
 }));
-app.use(bodyParser.json()); // Add this line to parse JSON request bodies
 app.options('*', (req, res) => {
   // Set CORS headers
   res.header('Access-Control-Allow-Origin', 'https://diskovery-ljvy.onrender.com');
@@ -326,6 +325,15 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res) => {
   
   
   app.get('/googleuser/data', async (req, res) => {
+    passport.authenticate('google', {
+      scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+      ],
+      session: true,
+      accessType: 'offline',
+      approvalPrompt: 'force'
+    });
     try {
       if(req.isAuthenticated()){
         console.log(req.user);
