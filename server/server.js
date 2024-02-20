@@ -15,7 +15,7 @@ app.use(cors({ origin: true, credentials: true }));
 
 app.use(session({
   store: new MongoStore({ 
-    url: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
+    mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
     autoRemove: 'interval',
     autoRemoveInterval: 10, // Removes expired sessions every 10 minutes
   }),
