@@ -336,15 +336,14 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res) => {
     });
     try {
       if(req.isAuthenticated()){
-        console.log(req.user);
-        console.log(JSON.stringify(req.session.passport));
+        console.log(req.user.userId);
         const sessionData = req.session;
         console.log(sessionData);
       }
       
         // Check if user is authenticated
         
-        const userId = JSON.stringify(req.session.passport);
+        const userId = req.user.userId;
 
         // Find user in the database
         try {

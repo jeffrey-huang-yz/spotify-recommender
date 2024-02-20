@@ -27,7 +27,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userResponse = await axios.get('https://diskovery.onrender.com/spotifyuser');
+      const userResponse = await axios.get('https://diskovery.onrender.com/spotifyuser', { withCredentials: true });
     
       setUserImage(userResponse.data.image);
     };
@@ -91,7 +91,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('https://diskovery.onrender.com/googleuser/data', { withCredentials: true, });
+        const response = await axios.get('https://diskovery.onrender.com/googleuser/data', { withCredentials: true });
         setUser(response.data);
         setRefreshUserData(false); // Reset the refresh trigger
       } catch (error) {
@@ -106,7 +106,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
 
     const fetchRecentlyPlayedTracks = async () => {
       try {
-        const response = await axios.get('https://diskovery.onrender.com/recently-played');
+        const response = await axios.get('https://diskovery.onrender.com/recently-played', { withCredentials: true });
         setRecentlyPlayedTracks(response.data);
       } catch (error) {
         console.error('Error fetching recently played tracks:', error);
@@ -163,11 +163,11 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const handleRecommendation = async () => {
     try {
       
-      const response = await axios.get('https://diskovery.onrender.com/recommendations', {
+      const response = await axios.get('https://diskovery.onrender.com/recommendations',{ withCredentials: true }, {
         params: {
           seedTracks: seedTracks,
           user: user,
-        },
+        }, 
       });
   
       setRecommendationResults(response.data);
