@@ -321,13 +321,13 @@ accessType: 'offline', approvalPrompt: 'force' }));
   app.get('/googleuser/data', async (req, res) => {
     try {
       res.redirect(`https://diskovery.onrender.com/googleuser`);
-      console.log(req.user);
+      console.log(JSON.stringify(req.session.passport));
       console.log(req.session.passport)
       const sessionData = req.session;
       console.log(sessionData);
         // Check if user is authenticated
         
-        const userId = sessionData.passport.user.userId;
+        const userId = sessionData.passport.user;
 
         // Find user in the database
         try {
