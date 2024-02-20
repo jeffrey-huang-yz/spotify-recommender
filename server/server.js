@@ -32,6 +32,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.set('trust proxy', 1) // trust first proxy
 const port = process.env.PORT
+
+app.use((req, res, next) => {
+  res.setHeader('Set-Cookie', 'SameSite=None; Secure');
+  next();
+});
+
 /*
 * MongoDB
 */
@@ -325,7 +331,8 @@ accessType: 'offline', approvalPrompt: 'force', keepSessionInfo: true }));
   
   app.get('/googleuser/data', passport.authenticate('session'), async (req, res) => {
     try {
-
+        console.log(req.session);
+        console.log(req.user);
         const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
   
         try {
