@@ -227,7 +227,7 @@ app.put('/reset-button-values/:userId', async (req, res) => {
 passport.use(new GoogleStrategy({
   clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
   clientSecret: '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',
-  callbackURL: 'https://diskovery.onrender.com/auth/google/callback',
+  callbackURL: 'https://diskovery.onrender.com/auth/google/callback', 
   accessType: 'offline',
   approvalPrompt: 'force',
   session: true,
@@ -276,12 +276,14 @@ passport.use(new GoogleStrategy({
 }));
 
 passport.serializeUser((user, done) => {
-  // Serialize user data (save only what you need) into the session
+  console.log('Serializing user:', user);
   done(null, user); // Assuming userId is unique
 });
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(err, user);
+  });
 });
 
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
