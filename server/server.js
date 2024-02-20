@@ -325,7 +325,7 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res) => {
   );
   
   
-  app.get('/googleuser/data', passport.authenticate('google'), async (req, res) => {
+  app.get('/googleuser/data', async (req, res) => {
     try {
       if(req.isAuthenticated()){
         console.log(req.user);
