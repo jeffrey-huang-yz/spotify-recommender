@@ -281,9 +281,9 @@ passport.serializeUser((user, done) => {
   done(null, user.userId);
 });
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (user, done) => {
   try {
-    const user = await User.findById(id);
+    const user = User.findOne({ userId: user.userId });
     done(null, user);
   } catch (error) {
     done(error, null);
@@ -324,11 +324,9 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
-    
+      console.log(req);
       const sessionData = req.session;
       console.log(sessionData);
-
-      console.log(req);
         // Check if user is authenticated
         
         const userId = sessionData.passport.user.userId;
