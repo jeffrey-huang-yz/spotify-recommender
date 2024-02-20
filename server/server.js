@@ -310,16 +310,11 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
-      const sessionData = req.passport;
+      const sessionData = req.session;
       console.log(sessionData);
         // Check if user is authenticated
         
-
-        // Access userId from session data
-        const { passport } = req.passport;
-        const { user } = passport || {};
-        const { userId } = user || {};
-
+        const userId = sessionData.passport.user.userId;
 
         // Find user in the database
         try {
