@@ -326,8 +326,7 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   );
   
   
-  app.get('/googleuser/data', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-  'https://www.googleapis.com/auth/userinfo.email']}, { failureRedirect: '/' }), async (req, res, next) => {
+  app.get('/googleuser/data'), async (req, res, next) => {
     
     try {
       if(req.isAuthenticated()){
@@ -358,7 +357,7 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
         console.error('Error checking authentication:', error);
         return res.status(500).json({ error: 'Error checking authentication' });
     }
-});
+  };
 /**
  * SpotifyWebApi
 */
