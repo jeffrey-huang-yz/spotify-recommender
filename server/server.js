@@ -324,15 +324,15 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   );
   
   
-  app.get('/auth/google/data'), async (req, res, next) => {
-  
+  app.get('/userdata', async (req, res, next) => {
     try {
-      
-        console.log(JSON.parse(req.session.passport.userId));
-      
         // Check if user is authenticated
-        
-        const userId = JSON.parse(req.session.passport.userId)
+        if (!req.user) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        // Retrieve user ID from req.user
+        const userId = req.user.userId;
 
         // Find user in the database
         try {
@@ -347,12 +347,11 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
             console.error('Error fetching user:', error);
             return res.status(500).json({ error: 'Error fetching user' });
         }
-
     } catch (error) {
         console.error('Error checking authentication:', error);
         return res.status(500).json({ error: 'Error checking authentication' });
     }
-  };
+});
 
 
 
