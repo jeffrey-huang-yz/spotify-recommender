@@ -1,10 +1,10 @@
 const express = require('express');
+const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./src/User');
 const app = express();
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
 const bodyParser = require('body-parser');
 
 const cors = require("cors");
@@ -23,12 +23,11 @@ app.use(session({
     secure: false,
   }
 }));
-
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 app.set('trust proxy', 1) // trust first proxy
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
 const port = process.env.PORT
 /*
 * MongoDB
@@ -306,8 +305,8 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   
   app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res, next) => {
     // Redirect to your frontend application with user data in query parameters
-    res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
-    
+    res.redirect('https://diskovery-ljvy.onrender.com/login');
+    console.log(isAuthenticated())
   });
 
   app.get(
@@ -324,7 +323,7 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   );
   
   
-  app.get('/googleuser/data'), async (req, res, next) => {
+  app.get('/auth/google/data'), async (req, res, next) => {
     console.log(isAuthenticated());
     try {
       
