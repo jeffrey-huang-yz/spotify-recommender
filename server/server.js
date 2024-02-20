@@ -6,7 +6,7 @@ const User = require('./src/User');
 const app = express();
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
+const axios = require('axios');
 const cors = require("cors");
 const MongoStore = require('connect-mongo');
 
