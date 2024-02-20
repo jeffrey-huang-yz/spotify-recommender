@@ -320,10 +320,13 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
-      console.log(req.user);
-      console.log(JSON.stringify(req.session.passport));
-      const sessionData = req.session;
-      console.log(sessionData);
+      if(req.isAuthenticated()){
+        console.log(req.user);
+        console.log(JSON.stringify(req.session.passport));
+        const sessionData = req.session;
+        console.log(sessionData);
+      }
+      
         // Check if user is authenticated
         
         const userId = JSON.stringify(req.session.passport);
