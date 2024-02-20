@@ -20,9 +20,10 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: false,
-    secure: false,
+    secure: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week in milliseconds
     sameSite: 'none',
+
   }
 }));
 
@@ -33,10 +34,7 @@ app.use(cookieParser());
 app.set('trust proxy', 1) // trust first proxy
 const port = process.env.PORT
 
-app.use((req, res, next) => {
-  res.setHeader('Set-Cookie', 'SameSite=None; Secure');
-  next();
-});
+
 
 /*
 * MongoDB
