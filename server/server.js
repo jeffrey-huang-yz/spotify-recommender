@@ -22,6 +22,7 @@ app.use(session({
     httpOnly: false,
     secure: false,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week in milliseconds
+    sameSite: 'none',
   }
 }));
 
@@ -268,7 +269,7 @@ passport.use(new GoogleStrategy({
       });
 
       await newUser.save();
-
+      
       return done(null, newUser);
   } catch (error) {
       console.error('Error creating user and buttons:', error);
@@ -302,6 +303,7 @@ accessType: 'offline', approvalPrompt: 'force', keepSessionInfo: true }));
   passport.authenticate('google', { failureRedirect: '/', keepSessionInfo: true,}),
   (req, res) => {
     // Successful authentication, redirect to the login page
+    req.session.save();
     res.redirect('https://diskovery-ljvy.onrender.com/login');
   }
 );
