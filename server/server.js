@@ -37,6 +37,13 @@ app.use(cors({
   credentials: true,  // Enable credentials (cookies, authorization headers, etc.)
 }));
 app.use(bodyParser.json()); // Add this line to parse JSON request bodies
+app.options('*', (req, res) => {
+  // Set CORS headers
+  res.header('Access-Control-Allow-Origin', 'https://diskovery-ljvy.onrender.com');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.status(200).end();
+});
 // CRUD operations
 
 // Create a new user
