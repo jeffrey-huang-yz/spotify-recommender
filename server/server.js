@@ -286,7 +286,7 @@ passport.deserializeUser((user, done) => {
 });
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
 'https://www.googleapis.com/auth/userinfo.email'],
-accessType: 'offline', approvalPrompt: 'force' }));
+accessType: 'offline', approvalPrompt: 'force', keepSessionInfo: true }));
 
   const { OAuth2Client } = require('google-auth-library');
   const google = require('googleapis').google;
@@ -298,7 +298,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
   });
   
   app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
+  passport.authenticate('google', { failureRedirect: '/', keepSessionInfo: true,}),
   (req, res) => {
     // Successful authentication, redirect to the login page
     res.redirect('https://diskovery-ljvy.onrender.com/login');
@@ -314,17 +314,12 @@ accessType: 'offline', approvalPrompt: 'force' }));
       ],
       session: true,
       accessType: 'offline',
-      approvalPrompt: 'force'
+      approvalPrompt: 'force',
+      keepSessionInfo: true,
     })
   );
   
-  app.get('/auth/google/refresh',
-  passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
-    // Successful authentication, redirect to the login page
-    res.redirect('https://diskovery-ljvy.onrender.com/home');
-  }
-); 
+  
   app.get('/googleuser/data', async (req, res) => {
     try {
       if (req.user) {
