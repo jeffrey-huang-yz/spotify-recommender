@@ -321,16 +321,15 @@ accessType: 'offline', approvalPrompt: 'force' }));
   app.get('/googleuser/data', async (req, res) => {
     try {
       console.log(JSON.stringify(req.session.passport));
-      console.log(req.session.passport)
       const sessionData = req.session;
       console.log(sessionData);
         // Check if user is authenticated
         
-        const userId = JSON.stringify(req.session.passport);
+        const userId = JSON.stringify(req.session.passport.user);
 
         // Find user in the database
         try {
-            const foundUser = await User.findOne({ userId });
+            const foundUser = await User.findOne({ userId: userId });
 
             if (foundUser) {
                 return res.json(foundUser);
