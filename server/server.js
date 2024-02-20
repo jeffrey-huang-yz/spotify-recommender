@@ -230,7 +230,8 @@ passport.use(new GoogleStrategy({
   clientSecret: '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',
   callbackURL: 'https://diskovery.onrender.com/auth/google/callback',
   accessType: 'offline',
-  approvalPrompt: 'force'
+  approvalPrompt: 'force',
+  session: true,
 }, async (accessToken, refreshToken, profile, done) => {
   try {
       // Check if the user already exists in the database
@@ -275,20 +276,17 @@ passport.use(new GoogleStrategy({
 
 passport.serializeUser((user, done) => {
   // Serialize user data (save only what you need) into the session
-  done(null, user.userId); // Assuming userId is unique
+  done(null, user); // Assuming userId is unique
 });
 
-passport.deserializeUser(async (id, done) => {
-  try {
-      const user = await User.findOne({ userId: id });
+passport.deserializeUser((user, done) => {
+
       done(null, user);
-  } catch (error) {
-      done(error, null);
-  }
+
 });
 
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-'https://www.googleapis.com/auth/userinfo.email'],
+'https://www.googleapis.com/auth/userinfo.email'], session: true,
 accessType: 'offline', approvalPrompt: 'force' }));
 
   const { OAuth2Client } = require('google-auth-library');
@@ -313,6 +311,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email'
       ],
+      session: true,
       accessType: 'offline',
       approvalPrompt: 'force'
     })
@@ -322,14 +321,14 @@ accessType: 'offline', approvalPrompt: 'force' }));
   app.get('/googleuser/data', async (req, res) => {
     try {
       passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-'https://www.googleapis.com/auth/userinfo.email'],
+'https://www.googleapis.com/auth/userinfo.email'], session: true,
 accessType: 'offline', approvalPrompt: 'force' });
-      console.log(JSON.stringify(req.session.passport.user));
+      console.log(JSON.stringify(req.session.passport));
       const sessionData = req.session;
       console.log(sessionData);
         // Check if user is authenticated
         
-        const userId = JSON.stringify(req.session.passport.user);
+        const userId = JSON.stringify(req.session.passport);
 
         // Find user in the database
         try {
