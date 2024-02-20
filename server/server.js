@@ -282,7 +282,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((user, done) => {
     console.log('Deserializing user:', user);
-    done(err, user);
+    done(null, user);
 });
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
 'https://www.googleapis.com/auth/userinfo.email'], session: true,
