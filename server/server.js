@@ -1,39 +1,41 @@
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const session = require('express-session');
 const User = require('./src/User');
 const app = express();
 const cookieParser = require('cookie-parser');
-
-
+const session = require('express-session');
+const bodyParser = require('body-parser');
 
 const cors = require("cors");
 const MongoStore = require('connect-mongo');
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser());
+app.use(bodyParser());
 app.use(session({
   store: new MongoStore({ 
     mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
   }),
   proxy : true,
   secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: false,
+  resave: true,
+  saveUninitialized: true,
   cookie: {
     httpOnly: false,
     secure: false,
   }
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.set('trust proxy', 1) // trust first proxy
 const port = process.env.PORT
 /*
 * MongoDB
 */
 
 const SpotifyWebApi = require('spotify-web-api-node');
-const bodyParser = require('body-parser'); // Add this line
 
 
 const { MongoClient } = require('mongodb');
@@ -221,9 +223,7 @@ app.put('/reset-button-values/:userId', async (req, res) => {
 * Google OAuth
 */
 
-app.use(session({ secret: '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', resave: true, saveUninitialized: true }));
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 passport.use(new GoogleStrategy({
   clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
