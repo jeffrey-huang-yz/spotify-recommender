@@ -11,8 +11,6 @@ const cors = require("cors");
 const MongoStore = require('connect-mongo');
 
 app.use(cors({ origin: '*', credentials: true, allowedHeaders: "Content-Type, Authorization", }));
-app.use(cookieParser());
-app.use(bodyParser.json());
 app.use(session({
   store: new MongoStore({ 
     mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
@@ -29,6 +27,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.set('trust proxy', 1) // trust first proxy
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 const port = process.env.PORT
 /*
 * MongoDB
@@ -238,7 +238,9 @@ passport.use(new GoogleStrategy({
 
       if (existingUser) {
           // User already exists, return the existing user
+          console.log('User already exists:');
           return done(null, existingUser);
+          
       }
 
       // Add default buttons for the new user
@@ -286,7 +288,7 @@ passport.deserializeUser((user, done) => {
 
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
 'https://www.googleapis.com/auth/userinfo.email'], session: true,
-accessType: 'offline', approvalPrompt: 'force' }), (req, res) => {
+accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   // Redirect to your frontend application with user data in query parameters
   res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
   
@@ -304,7 +306,7 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res) => {
     redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
   });
   
-  app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+  app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res, next) => {
     // Redirect to your frontend application with user data in query parameters
     res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
     
@@ -324,16 +326,8 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res) => {
   );
   
   
-  app.get('/googleuser/data', async (req, res) => {
-    passport.authenticate('google', {
-      scope: [
-        'https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email'
-      ],
-      session: true,
-      accessType: 'offline',
-      approvalPrompt: 'force'
-    });
+  app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res, next) => {
+    
     try {
       if(req.isAuthenticated()){
         console.log(req.user.userId);
