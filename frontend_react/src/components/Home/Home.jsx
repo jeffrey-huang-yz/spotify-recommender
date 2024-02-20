@@ -90,19 +90,11 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const response = await axios.get('https://diskovery.onrender.com/googleuser/data', { withCredentials: true });
-        setUser(response.data);
-        setRefreshUserData(false); // Reset the refresh trigger
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          // The user is not authenticated, redirect to the Google OAuth2 authorization page
-          window.location.href = '/auth/google';
-        } else {
-          console.error(error);
-        }
-      }
+      const response = await axios.get('https://diskovery.onrender.com/googleuser/data', { withCredentials: true });
+      setUser(response.data);
+      setRefreshUserData(false); // Reset the refresh trigger
     };
+
 
     const fetchRecentlyPlayedTracks = async () => {
       try {
