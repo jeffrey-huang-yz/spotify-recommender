@@ -308,13 +308,27 @@ accessType: 'offline', approvalPrompt: 'force' }));
     res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
     
   });
+
+  app.get(
+    '/googleuser',
+    passport.authenticate('google', {
+      scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+      ],
+      accessType: 'offline',
+      approvalPrompt: 'force'
+    })
+  );
+  
   
   app.get('/googleuser/data', async (req, res) => {
     try {
-      passport.authenticate('google', { failureRedirect: '/' });
+      res.redirect(`https://diskovery-ljvy.onrender.com/home/?userId=${req.user.userId}&email=${req.user.email}`);
       const sessionData = req.session;
       console.log(sessionData);
-      console.log(sessionData.passport);
+      console.log(sessionData.passport.user);
+      console.log(req.user.userId);
         // Check if user is authenticated
         
         const userId = sessionData.passport.user.userId;
