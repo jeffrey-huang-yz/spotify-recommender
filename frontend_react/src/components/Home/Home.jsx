@@ -28,6 +28,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   useEffect(() => {
     const fetchData = async () => {
       const userResponse = await axios.get('https://diskovery.onrender.com/spotifyuser');
+    
       setUserImage(userResponse.data.image);
     };
 

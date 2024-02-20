@@ -20,6 +20,7 @@ app.use(session({
   secret: 'your-secret-key',
   resave: false,
   saveUninitialized: false,
+  httpOnly: false,
 }));
 
 const port = process.env.PORT
@@ -304,35 +305,40 @@ accessType: 'offline', approvalPrompt: 'force' }));
     res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
   });
   
-  app.get('/googleuser/data', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-  'https://www.googleapis.com/auth/userinfo.email'],
-  accessType: 'offline', approvalPrompt: 'force' }), async (req, res) => {
-
-  try {       
-    
-
-      // If the user is authenticated, retrieve user data from the database
-      const userId = req.user.userId;
-      console.log(userId);
-      try {
-        const user = await User.findOne({ userId: userId });
-
-        if (user) {
-          console.log(user);
-          res.json(user);
-        } else {
-          res.status(404).json({ error: 'User not found' });
+  app.get('/googleuser/data', async (req, res) => {
+    try {
+        // Check if user is authenticated
+        if (!req.session || !req.session.cookie || !req.session.cookie.expires || new Date(req.session.cookie.expires) < new Date()) {
+            return res.status(401).json({ error: 'Unauthorized' });
         }
-      } catch (error) {
-        console.error('Error fetching user:', error);
-        res.status(500).json({ error: 'Error fetching user' });
-      }
 
-    
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-    res.status(500).json({ error: 'Error checking authentication' });
-  }
+        // Access userId from session data
+        const { passport } = req.session;
+        const { user } = passport || {};
+        const { userId } = user || {};
+
+        if (!userId) {
+            return res.status(400).json({ error: 'User ID not found in session' });
+        }
+
+        // Find user in the database
+        try {
+            const foundUser = await User.findOne({ userId });
+
+            if (foundUser) {
+                return res.json(foundUser);
+            } else {
+                return res.status(404).json({ error: 'User not found' });
+            }
+        } catch (error) {
+            console.error('Error fetching user:', error);
+            return res.status(500).json({ error: 'Error fetching user' });
+        }
+
+    } catch (error) {
+        console.error('Error checking authentication:', error);
+        return res.status(500).json({ error: 'Error checking authentication' });
+    }
 });
 /**
  * SpotifyWebApi
