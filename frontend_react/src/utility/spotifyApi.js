@@ -14,7 +14,7 @@ export const exchangeCodeForAccessToken = async (code) => {
 
 export const verifyAccessToken = async (accessToken) => {
   try {
-    const response = await axios.get('https://api.spotify.com/v1/me', { withCredentials: true }, {
+    const response = await axios.get('https://api.spotify.com/v1/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
