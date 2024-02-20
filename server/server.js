@@ -306,7 +306,7 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res, next) => {
     // Redirect to your frontend application with user data in query parameters
     res.redirect('https://diskovery-ljvy.onrender.com/login');
-    console.log(isAuthenticated())
+
   });
 
   app.get(
