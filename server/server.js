@@ -280,23 +280,30 @@ accessType: 'offline', approvalPrompt: 'force' }));
     try {
       passport.authenticate('google', { failureRedirect: '/' })
       // Check if the user is authenticated
-      if (!req.user) {
-        return res.status(401).json({ error: 'User not authenticated' });
+      if (req.isAuthenticated()) {
+        // If the user is authenticated, retrieve user data from the database
+        const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
+  
+        try {
+          const user = await User.findOne({ userId });
+  
+          if (user) {
+            console.log(user);
+            res.json(user);
+          } else {
+            res.status(404).json({ error: 'User not found' });
+          }
+        } catch (error) {
+          console.error('Error fetching user:', error);
+          res.status(500).json({ error: 'Error fetching user' });
+        }
+      } else {
+        // The user is not authenticated, send an error response
+        res.status(401).json({ error: 'Not authenticated' });
       }
-  
-      // Find the user data in the database
-      const userData = await User.findOne({ userId: req.user.userId });
-  
-      // Check if user data exists
-      if (!userData) {
-        return res.status(404).json({ error: 'User data not found' });
-      }
-  
-      // Send the user data as JSON response
-      res.json(userData);
     } catch (error) {
-      console.error('Error fetching user data:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error('Error checking authentication:', error);
+      res.status(500).json({ error: 'Error checking authentication' });
     }
   });
 
