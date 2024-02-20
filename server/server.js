@@ -239,6 +239,7 @@ passport.use(new GoogleStrategy({
       if (existingUser) {
           // User already exists, return the existing user
           console.log('User already exists:');
+          console.log(req.user);
           return done(null, existingUser);
           
       }
