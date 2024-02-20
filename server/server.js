@@ -318,7 +318,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
   );
   
   
-  app.get('/googleuser/data', {credentials: 'include'}, async (req, res) => {
+  app.get('/googleuser/data', async (req, res) => {
     try {
       console.log(req.user);
       console.log(JSON.stringify(req.session.passport));
