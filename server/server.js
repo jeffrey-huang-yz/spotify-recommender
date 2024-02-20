@@ -25,7 +25,7 @@ app.use(session({
 }));
 
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.authenticate('session'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.set('trust proxy', 1) // trust first proxy
@@ -286,15 +286,7 @@ passport.deserializeUser((user, done) => {
 });
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
 'https://www.googleapis.com/auth/userinfo.email'], session: true,
-accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
-
-  
-  res.redirect('https://diskovery-ljvy.onrender.com/login');
-  
-}
-
-
-);
+accessType: 'offline', approvalPrompt: 'force' }));
 
   const { OAuth2Client } = require('google-auth-library');
   const google = require('googleapis').google;
@@ -305,7 +297,7 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
     redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
   });
   
-  app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }, { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+  app.get('/auth/google/callback', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
   'https://www.googleapis.com/auth/userinfo.email'], session: true,
   accessType: 'offline', approvalPrompt: 'force' }),), (req, res, next) => {
     // Redirect to your frontend application with user data in query parameters
