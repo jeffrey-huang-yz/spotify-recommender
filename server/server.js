@@ -284,16 +284,8 @@ passport.deserializeUser((user, done) => {
     console.log('Deserializing user:', user);
     done(null, user);
 });
-app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-'https://www.googleapis.com/auth/userinfo.email'], session: true,
-accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
-  // Redirect to your frontend application with user data in query parameters
-  res.redirect('https://diskovery-ljvy.onrender.com/login');
-  
-}
 
 
-);
 
   const { OAuth2Client } = require('google-auth-library');
   const google = require('googleapis').google;
