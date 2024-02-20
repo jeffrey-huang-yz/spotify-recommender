@@ -24,11 +24,11 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const searchbarRef = useRef(null);
   const logoutTimeoutRef = useRef(null); // Ref to store the timeout ID
   const [userImage, setUserImage] = useState();
-
+  axios.defaults.withCredentials = true;
   useEffect(() => {
     const fetchData = async () => {
       const userResponse = await axios.get('https://diskovery.onrender.com/spotifyuser', { withCredentials: true });
-    
+     
       setUserImage(userResponse.data.image);
     };
 
