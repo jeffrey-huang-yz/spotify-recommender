@@ -329,7 +329,7 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   app.get('/googleuser/data'), async (req, res, next) => {
     
     try {
-      if(req.isAuthenticated()){
+      if(req.user){
         console.log(req.user.userId);
         const sessionData = req.session;
         console.log(sessionData);
