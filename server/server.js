@@ -6,7 +6,7 @@ const User = require('./src/User');
 const app = express();
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const axios = require('axios');
+
 const cors = require("cors");
 const MongoStore = require('connect-mongo');
 
@@ -287,7 +287,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 'https://www.googleapis.com/auth/userinfo.email'], session: true,
 accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   // Redirect to your frontend application with user data in query parameters
-  res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
+  res.redirect('/auth/google/data');
   
 }
 
@@ -303,33 +303,11 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
     redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
   });
   
-  app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
-  try {
-    const code = req.query.code;
-    const tokenEndpoint = 'https://oauth2.googleapis.com/token';
-    const redirectUri = 'https://diskovery-ljvy.onrender.com/login/'; // This should match your callback URI registered with Google
-
-    const requestBody = {
-      code: code,
-      client_id: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
-      client_secret: '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',
-      redirect_uri: redirectUri,
-      grant_type: 'authorization_code'
-    };
-
-    const response = await axios.post(tokenEndpoint, requestBody);
-    const accessToken = response.data.access_token;
-    const refreshToken = response.data.refresh_token;
-
-    // You may want to save these tokens to the user's session or database
-
-    // Redirect to your frontend with the tokens
-    res.redirect(`https://diskovery-ljvy.onrender.com/login/?accessToken=${accessToken}&refreshToken=${refreshToken}`);
-  } catch (error) {
-    console.error('Error exchanging authorization code for tokens:', error);
-    res.status(500).send('Error exchanging authorization code for tokens');
-  }
-});
+  app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res, next) => {
+    // Redirect to your frontend application with user data in query parameters
+    res.redirect('https://diskovery-ljvy.onrender.com/login');
+    console.log(isAuthenticated())
+  });
 
   app.get(
     '/googleuser',
