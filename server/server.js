@@ -289,14 +289,10 @@ accessType: 'offline', approvalPrompt: 'force' }));
     res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
   });
   
-  app.get('/googleuser/data',  passport.authenticate('google', {
-    scope: ['profile', 'email'],
-    accessType: 'offline',
-    approvalPrompt: 'force'
-  }), async (req, res) => {
+  app.get('/googleuser/data',  ), async (req, res) => {
     // Check if the user is authenticated
     res.jsoon('test');
-  });
+  };
 /**
  * SpotifyWebApi
 */
