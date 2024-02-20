@@ -11,6 +11,7 @@ const cors = require("cors");
 const MongoStore = require('connect-mongo');
 
 app.use(cors({ origin: '*', credentials: true, allowedHeaders: "Content-Type, Authorization", }));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   store: new MongoStore({ 
     mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
@@ -285,7 +286,7 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-'https://www.googleapis.com/auth/userinfo.email'], session: true,
+'https://www.googleapis.com/auth/userinfo.email'],
 accessType: 'offline', approvalPrompt: 'force' }));
 
   const { OAuth2Client } = require('google-auth-library');
@@ -297,12 +298,13 @@ accessType: 'offline', approvalPrompt: 'force' }));
     redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
   });
   
-  app.get('/auth/google/callback', passport.authenticate('google', { session: true,
-  accessType: 'offline', approvalPrompt: 'force' }),), (req, res, next) => {
-    // Redirect to your frontend application with user data in query parameters
+  app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    // Successful authentication, redirect to the login page
     res.redirect('https://diskovery-ljvy.onrender.com/login');
-
-  };
+  }
+);
 
   app.get(
     '/googleuser',
@@ -318,35 +320,35 @@ accessType: 'offline', approvalPrompt: 'force' }));
   );
   
   
-  app.get('/userdata', async (req, res, next) => {
+  app.get('/googleuser/data', async (req, res) => {
     try {
-        // Check if user is authenticated
-        if (!req.user) {
-            return res.status(401).json({ error: 'Unauthorized' });
-        }
-
-        // Retrieve user ID from req.user
-        const userId = req.user.userId;
-
-        // Find user in the database
+      passport.authenticate('google', { failureRedirect: '/' });
+      if (req.isAuthenticated()) {
+        // If the user is authenticated, retrieve user data from the database
+        const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
+  
         try {
-            const foundUser = await User.findOne({ userId: userId });
-
-            if (foundUser) {
-                return res.json(foundUser);
-            } else {
-                return res.status(404).json({ error: 'User not found' });
-            }
+          const user = await User.findOne({ userId });
+  
+          if (user) {
+            console.log(user);
+            res.json(user);
+          } else {
+            res.status(404).json({ error: 'User not found' });
+          }
         } catch (error) {
-            console.error('Error fetching user:', error);
-            return res.status(500).json({ error: 'Error fetching user' });
+          console.error('Error fetching user:', error);
+          res.status(500).json({ error: 'Error fetching user' });
         }
+      } else {
+        // The user is not authenticated, send an error response
+        res.status(401).json({ error: 'Not authenticated' });
+      }
     } catch (error) {
-        console.error('Error checking authentication:', error);
-        return res.status(500).json({ error: 'Error checking authentication' });
+      console.error('Error checking authentication:', error);
+      res.status(500).json({ error: 'Error checking authentication' });
     }
-});
-
+  });
 
 
 /**
