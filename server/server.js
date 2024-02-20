@@ -31,6 +31,12 @@ client.connect().then(() => {
   console.error('Error connecting to MongoDB:', error);
 });
 
+app.use(cors({
+  origin: 'https://diskovery-ljvy.onrender.com', 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,  // Enable credentials (cookies, authorization headers, etc.)
+}));
+app.use(bodyParser.json()); // Add this line to parse JSON request bodies
 // CRUD operations
 
 // Create a new user
@@ -314,12 +320,7 @@ const spotifyApi = new SpotifyWebApi({
   redirectUri: 'https://diskovery-ljvy.onrender.com/callback',
 });
 
-app.use(cors({
-  origin: 'https://diskovery-ljvy.onrender.com', 
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,  // Enable credentials (cookies, authorization headers, etc.)
-}));
-app.use(bodyParser.json()); // Add this line to parse JSON request bodies
+
 
 // Redirect to Spotify for authentication
 app.get('/login', (req, res) => {
