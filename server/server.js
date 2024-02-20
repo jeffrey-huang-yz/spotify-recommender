@@ -304,16 +304,18 @@ accessType: 'offline', approvalPrompt: 'force' }));
     res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
   });
   
-  app.get('/googleuser/data', async (req, res) => {
+  app.get('/googleuser/data', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+  'https://www.googleapis.com/auth/userinfo.email'],
+  accessType: 'offline', approvalPrompt: 'force' }), async (req, res) => {
 
   try {       
     
 
       // If the user is authenticated, retrieve user data from the database
- 
+      const userId = req.user.userId;
       console.log(userId);
       try {
-        const user = await User.findOne({ userId });
+        const user = await User.findOne({ userId: userId });
 
         if (user) {
           console.log(user);
