@@ -20,7 +20,7 @@ const bodyParser = require('body-parser'); // Add this line
 const { MongoClient } = require('mongodb');
 
 // Connection URI 
-const uri = process.env.MONGODB_CONNECT_URI;
+const uri = 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test';
 
 // Create a MongoDB client and connect to the database
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -44,6 +44,8 @@ app.options('*', (req, res) => {
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
 });
+
+app.use(session({cookie: {httpOnly:false, sameSite: none,}, store: sessionStore,}));  
 // CRUD operations
 
 // Create a new user
