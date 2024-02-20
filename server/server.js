@@ -278,7 +278,7 @@ passport.use(new GoogleStrategy({
 
 passport.serializeUser((user, done) => {
   // Serialize user data (save only what you need) into the session
-  done(null, user);
+  done(null, user.userId);
 });
 
 passport.deserializeUser(async (id, done) => {
@@ -327,7 +327,6 @@ accessType: 'offline', approvalPrompt: 'force' }));
     
       const sessionData = req.session;
       console.log(sessionData);
-      console.log(sessionData.passport.user);
       console.log(req);
         // Check if user is authenticated
         
