@@ -4,15 +4,26 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 const User = require('./src/User');
 const app = express();
+
+
+
+const cors = require("cors");
+const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-
-
-const cors=require("cors");
 app.use(cors({ origin: true, credentials: true }));
+
 app.use(session({
-  store: MongoStore.create({ mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test' })
+  store: new MongoStore({ 
+    url: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
+    autoRemove: 'interval',
+    autoRemoveInterval: 10, // Removes expired sessions every 10 minutes
+  }),
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
 }));
+
 const port = process.env.PORT
 /*
 * MongoDB
