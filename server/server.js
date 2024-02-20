@@ -287,7 +287,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.g
 'https://www.googleapis.com/auth/userinfo.email'], session: true,
 accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   // Redirect to your frontend application with user data in query parameters
-  res.redirect('/auth/google/data');
+  res.redirect('https://diskovery-ljvy.onrender.com/login');
   
 }
 
@@ -323,7 +323,7 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   );
   
   
-  app.get('/auth/google/data'), async (req, res, next) => {
+  app.get('/auth/google/data'), passport.authenticate('local', { failureRedirect: '/' }), async (req, res, next) => {
     console.log(isAuthenticated());
     try {
       
