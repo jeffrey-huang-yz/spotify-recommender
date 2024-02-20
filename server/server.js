@@ -280,12 +280,10 @@ passport.serializeUser((user, done) => {
   done(null, user); // Assuming userId is unique
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
+passport.deserializeUser((user, done) => {
+    console.log('Deserializing user:', user);
     done(err, user);
-  });
 });
-
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
 'https://www.googleapis.com/auth/userinfo.email'], session: true,
 accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
