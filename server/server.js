@@ -318,11 +318,9 @@ accessType: 'offline', approvalPrompt: 'force' }));
   );
   
   
-  app.get('/googleuser/data', async (req, res) => {
+  app.get('/googleuser/data', {credentials: 'include'}, async (req, res) => {
     try {
-      passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
-'https://www.googleapis.com/auth/userinfo.email'], session: true,
-accessType: 'offline', approvalPrompt: 'force' });
+      console.log(req.user);
       console.log(JSON.stringify(req.session.passport));
       const sessionData = req.session;
       console.log(sessionData);
