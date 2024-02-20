@@ -320,7 +320,6 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
-      res.redirect(`https://diskovery.onrender.com/googleuser`);
       console.log(JSON.stringify(req.session.passport));
       console.log(req.session.passport)
       const sessionData = req.session;
