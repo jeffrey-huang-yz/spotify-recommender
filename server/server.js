@@ -197,6 +197,7 @@ passport.use(new GoogleStrategy({
   clientSecret: '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',
   callbackURL: 'https://diskovery.onrender.com/auth/google/callback',
   accessType: 'offline', 
+  approvalPrompt: 'force'
 }, async (accessToken, refreshToken, profile, done) => {
   // Check if the user already exists in the database
   try {
