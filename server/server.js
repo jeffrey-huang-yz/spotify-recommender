@@ -320,12 +320,15 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
-      console.log(JSON.stringify(req.session.passport));
+      passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+'https://www.googleapis.com/auth/userinfo.email'],
+accessType: 'offline', approvalPrompt: 'force' });
+      console.log(JSON.stringify(req.session.passport.user));
       const sessionData = req.session;
       console.log(sessionData);
         // Check if user is authenticated
         
-        const userId = JSON.stringify(req.session.passport);
+        const userId = JSON.stringify(req.session.passport.user);
 
         // Find user in the database
         try {
