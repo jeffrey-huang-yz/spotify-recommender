@@ -306,11 +306,11 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
 
-  try {
-    passport.authenticate('google', { failureRedirect: '/' });
+  try {       
+    
 
       // If the user is authenticated, retrieve user data from the database
-      const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
+      const userId = req.profile.id; // Assuming your User model has a field googleId for user identification
       console.log(userId);
       try {
         const user = await User.findOne({ userId });
