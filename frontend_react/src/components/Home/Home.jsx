@@ -22,7 +22,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const selectedSongsRef = useRef(null); 
   const recommendationRef = useRef(null);
   const searchbarRef = useRef(null);
-  const logoutTimeoutRef = useRef(null); // Ref to store the timeout ID
+  const logoutTimeoutRef = useRef(null); 
   const [userImage, setUserImage] = useState();
   axios.defaults.withCredentials = true;
   useEffect(() => {
