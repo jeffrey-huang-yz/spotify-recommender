@@ -8,7 +8,6 @@ const app = express();
 
 
 const cors = require("cors");
-const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
 app.use(cors({ origin: true, credentials: true }));
