@@ -313,7 +313,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
         const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
         console.log(userId);
         try {
-          const user = await User.findOne({ userId });
+          const user = await User.findOne({ userId: profile.id });
   
           if (user) {
             console.log(user);
