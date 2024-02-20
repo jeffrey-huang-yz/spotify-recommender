@@ -318,8 +318,14 @@ accessType: 'offline', approvalPrompt: 'force' }));
     })
   );
   
-  
-  app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
+  app.get('/auth/google/refresh',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    // Successful authentication, redirect to the login page
+    res.redirect('https://diskovery-ljvy.onrender.com/home');
+  }
+); 
+  app.get('/googleuser/data', async (req, res) => {
     try {
       if (req.user) {
         // If the user is authenticated, retrieve user data from the database
