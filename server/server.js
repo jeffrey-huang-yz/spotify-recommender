@@ -20,7 +20,9 @@ app.use(session({
   secret: 'your-secret-key',
   resave: false,
   saveUninitialized: false,
-  httpOnly: false,
+  cookie: {
+    httpOnly: false
+  }
 }));
 
 const port = process.env.PORT
@@ -307,6 +309,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
+        console.log(req.session);
         // Check if user is authenticated
         if (!req.session || !req.session.cookie || !req.session.cookie.expires || new Date(req.session.cookie.expires) < new Date()) {
             return res.status(401).json({ error: 'Unauthorized' });
