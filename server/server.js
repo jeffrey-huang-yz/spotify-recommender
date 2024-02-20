@@ -310,6 +310,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
+      passport.authenticate('google', { failureRedirect: '/' });
       const sessionData = req.session;
       console.log(sessionData);
         // Check if user is authenticated
