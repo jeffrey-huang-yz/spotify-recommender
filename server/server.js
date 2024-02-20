@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-var session = require("cookie-session");
+const session = require('express-session');
 const User = require('./src/User');
 const app = express();
 const cookieParser = require('cookie-parser');
@@ -327,6 +327,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
     
       const sessionData = req.session;
       console.log(sessionData);
+
       console.log(req);
         // Check if user is authenticated
         
