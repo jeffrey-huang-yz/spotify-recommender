@@ -276,7 +276,9 @@ accessType: 'offline', approvalPrompt: 'force' }));
   });
   
   app.get('/googleuser/data', async (req, res) => {
+
     try {
+      passport.authenticate('google', { failureRedirect: '/' })
       // Check if the user is authenticated
       if (!req.user) {
         return res.status(401).json({ error: 'User not authenticated' });
