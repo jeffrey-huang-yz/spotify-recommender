@@ -326,7 +326,8 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   );
   
   
-  app.get('/googleuser/data', passport.authenticate('google', { failureRedirect: '/' }), async (req, res, next) => {
+  app.get('/googleuser/data', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+  'https://www.googleapis.com/auth/userinfo.email']}, { failureRedirect: '/' }), async (req, res, next) => {
     
     try {
       if(req.isAuthenticated()){
