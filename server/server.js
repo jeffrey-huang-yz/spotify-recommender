@@ -1,16 +1,9 @@
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const session = require('express-session');
 const User = require('./src/User');
 const app = express();
-var session = require('express-session')
-var sessionstore = require('sessionstore');
-
-app.use(express.session({
-  store: sessionstore.createSessionStore({
-      type: 'mongodb',
-  })
-}));
 
 const cors=require("cors");
 app.use(cors({ origin: true, credentials: true }));
@@ -52,7 +45,7 @@ app.options('*', (req, res) => {
 
 });
 
-app.use(session({cookie: {httpOnly:false, sameSite: 'none'}}));  
+app.use(session({cookie: {httpOnly:false, sameSite: 'none'} }));  
 // CRUD operations
 
 // Create a new user
