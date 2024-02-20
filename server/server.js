@@ -17,6 +17,7 @@ app.use(session({
   store: new MongoStore({ 
     mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
   }),
+  proxy : true,
   secret: 'your-secret-key',
   resave: false,
   saveUninitialized: false,
