@@ -326,7 +326,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
       console.log(sessionData);
         // Check if user is authenticated
         
-        const userId = sessionData.passport.user;
+        const userId = JSON.stringify(req.session.passport);
 
         // Find user in the database
         try {
