@@ -239,7 +239,6 @@ passport.use(new GoogleStrategy({
       if (existingUser) {
           // User already exists, return the existing user
           console.log('User already exists:');
-          console.log(req.user);
           return done(null, existingUser);
           
       }
@@ -282,9 +281,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((user, done) => {
-
-      done(null, user);
-
+  done(null, user);
 });
 
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
