@@ -310,7 +310,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
     
 
       // If the user is authenticated, retrieve user data from the database
-      const userId = req.profile.id; // Assuming your User model has a field googleId for user identification
+ 
       console.log(userId);
       try {
         const user = await User.findOne({ userId });
