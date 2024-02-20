@@ -228,65 +228,61 @@ passport.use(new GoogleStrategy({
   clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
   clientSecret: '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',
   callbackURL: 'https://diskovery.onrender.com/auth/google/callback',
-  accessType: 'offline', 
+  accessType: 'offline',
   approvalPrompt: 'force'
 }, async (accessToken, refreshToken, profile, done) => {
-  // Check if the user already exists in the database
   try {
-    const existingUser = await User.findOne({ userId: profile.id });
+      // Check if the user already exists in the database
+      const existingUser = await User.findOne({ userId: profile.id });
 
-    if (existingUser) {
-      // User already exists, return the existing user
-      return done(null, existingUser);
-    }
+      if (existingUser) {
+          // User already exists, return the existing user
+          return done(null, existingUser);
+      }
 
-  
-    
       // Add default buttons for the new user
       const buttonsData = [
-        { buttonId: 'acousticness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
-        { buttonId: 'danceability', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
-        { buttonId: 'energy', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
-        { buttonId: 'instrumentalness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
-        { buttonId: 'key', max: 11, min: 0, userMax: 11, userMin: 0, targetValue: 5.5 },
-        { buttonId: 'liveness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
-        { buttonId: 'loudness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
-        { buttonId: 'mode', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
-        { buttonId: 'popularity', max: 100, min: 0, userMax: 100, userMin: 0, targetValue: 50 },
-        { buttonId: 'speechiness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
-        { buttonId: 'tempo', max: 250, min: 0, userMax: 250, userMin: 0, targetValue: 125 },
-        { buttonId: 'valence', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5},
+          { buttonId: 'acousticness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+          { buttonId: 'danceability', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+          { buttonId: 'energy', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+          { buttonId: 'instrumentalness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+          { buttonId: 'key', max: 11, min: 0, userMax: 11, userMin: 0, targetValue: 5.5 },
+          { buttonId: 'liveness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+          { buttonId: 'loudness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+          { buttonId: 'mode', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+          { buttonId: 'popularity', max: 100, min: 0, userMax: 100, userMin: 0, targetValue: 50 },
+          { buttonId: 'speechiness', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
+          { buttonId: 'tempo', max: 250, min: 0, userMax: 250, userMin: 0, targetValue: 125 },
+          { buttonId: 'valence', max: 1, min: 0, userMax: 1, userMin: 0, targetValue: 0.5 },
       ];
 
       // User does not exist, create a new user in the database
       const newUser = new User({
-        userId: profile.id,
-        email: profile.emails[0].value,
-        buttons:  buttonsData,
+          userId: profile.id,
+          email: profile.emails[0].value,
+          buttons: buttonsData,
       });
 
       await newUser.save();
 
       return done(null, newUser);
-    } catch (error) {
+  } catch (error) {
       console.error('Error creating user and buttons:', error);
       return done(error);
-    }
-  
+  }
 }));
-
 
 passport.serializeUser((user, done) => {
   // Serialize user data (save only what you need) into the session
-  done(null, user.userId);
+  done(null, user.userId); // Assuming userId is unique
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = User.findOne({ _id: id });
-    done(null, user);
+      const user = await User.findOne({ userId: id });
+      done(null, user);
   } catch (error) {
-    done(error, null);
+      done(error, null);
   }
 });
 
@@ -324,7 +320,8 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
-      console.log(req);
+      console.log(req.user);
+      console.log(req.session.passport)
       const sessionData = req.session;
       console.log(sessionData);
         // Check if user is authenticated
