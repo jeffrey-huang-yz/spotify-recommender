@@ -325,8 +325,9 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   
   
   app.get('/googleuser/data'), async (req, res, next) => {
-    
+    console.log(isAuthenticated());
     try {
+      
       console.log(req.user);
       if(req.user){
         console.log(req.user.userId);
