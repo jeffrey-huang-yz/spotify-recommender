@@ -310,8 +310,8 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
-        const cookies = req.cookies;
-        console.log(cookies)
+      const sessionData = req.session;
+      console.log(sessionData);
         // Check if user is authenticated
         
 
@@ -320,9 +320,6 @@ accessType: 'offline', approvalPrompt: 'force' }));
         const { user } = passport || {};
         const { userId } = user || {};
 
-        if (!userId) {
-            return res.status(400).json({ error: 'User ID not found in session' });
-        }
 
         // Find user in the database
         try {
