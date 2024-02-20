@@ -4,7 +4,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 const User = require('./src/User');
 const app = express();
-
+const cookieParser = require('cookie-parser');
 
 
 
@@ -12,7 +12,7 @@ const cors = require("cors");
 const MongoStore = require('connect-mongo');
 
 app.use(cors({ origin: true, credentials: true }));
-
+app.use(cookieParser());
 app.use(session({
   store: new MongoStore({ 
     mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
@@ -21,7 +21,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    httpOnly: false
+    httpOnly: false,
+    secure: false,
   }
 }));
 
@@ -309,11 +310,10 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
-        console.log(req.session);
+        const cookies = req.cookies;
+        console.log(cookies)
         // Check if user is authenticated
-        if (!req.session || !req.session.cookie || !req.session.cookie.expires || new Date(req.session.cookie.expires) < new Date()) {
-            return res.status(401).json({ error: 'Unauthorized' });
-        }
+        
 
         // Access userId from session data
         const { passport } = req.session;
