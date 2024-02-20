@@ -45,7 +45,7 @@ app.options('*', (req, res) => {
 
 });
 
-app.use(session({cookie: {httpOnly:false, sameSite: none,}, store: sessionStore,}));  
+app.use(session({cookie: {httpOnly:false, sameSite: 'none'}, store: sessionStore,}));  
 // CRUD operations
 
 // Create a new user
