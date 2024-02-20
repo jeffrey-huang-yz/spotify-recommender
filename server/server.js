@@ -276,12 +276,11 @@ accessType: 'offline', approvalPrompt: 'force' }));
   });
   
   app.get('/googleuser/data', async (req, res) => {
-    console.log(req.user.userId);
     if (req.isAuthenticated()) {
       const userId = req.user.userId;
       const user = await User.findOne({ userId: userId });
       console.log(user);
-      res.json(user); // Return user details
+        res.json(user); // Return user details
     } else {
       res.status(401).json({ error: 'Not authenticated' });
     }
@@ -331,7 +330,7 @@ app.get('/callback', async (req, res) => {
     spotifyApi.setRefreshToken(refreshToken);
 
     // Redirect to the front-end with tokens (in a production environment, handle tokens securely)
-    res.redirect(`https://diskovery-ljvy.onrender.com/?accessToken=${accessToken}&refreshToken=${refreshToken}`);
+    res.redirect(`https://diskovery-ljvy.onrender.com/?userId=${req.user.userId}&accessToken=${accessToken}&refreshToken=${refreshToken}`);
   } catch (error) {
     console.error('Error getting access token:', error);
     res.status(500).send('Error getting access token');
