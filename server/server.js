@@ -323,20 +323,16 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   );
   
   
-  app.get('/auth/google/data'), passport.authenticate('local', { failureRedirect: '/' }), async (req, res, next) => {
-    console.log(isAuthenticated());
+  app.get('/auth/google/data'), passport.authenticate('google', { failureRedirect: '/' }), async (req, res, next) => {
+  
     try {
-      
-      console.log(req.user);
       if(req.user){
-        console.log(req.user.userId);
-        const sessionData = req.session;
-        console.log(sessionData);
+        console.log(JSON.parse(req.session.passport.userId));
       }
       
         // Check if user is authenticated
         
-        const userId = req.user.userId;
+        const userId = JSON.parse(req.session.passport.userId)
 
         // Find user in the database
         try {
