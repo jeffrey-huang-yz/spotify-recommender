@@ -11,7 +11,6 @@ const cors = require("cors");
 const MongoStore = require('connect-mongo');
 
 app.use(cors({ origin: '*', credentials: true, allowedHeaders: "Content-Type, Authorization", }));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   store: new MongoStore({ 
     mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
