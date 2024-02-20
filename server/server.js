@@ -304,10 +304,34 @@ accessType: 'offline', approvalPrompt: 'force' }));
     res.redirect(`https://diskovery-ljvy.onrender.com/login/?userId=${req.user.userId}&email=${req.user.email}`);
   });
   
-  app.get('/googleuser/data',  ), async (req, res) => {
-    // Check if the user is authenticated
-    res.jsoon('test');
-  };
+  app.get('/googleuser/data', async (req, res) => {
+
+    try {
+      passport.authenticate('google', { failureRedirect: '/' });
+  
+        // If the user is authenticated, retrieve user data from the database
+        const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
+        console.log(userId);
+        try {
+          const user = await User.findOne({ userId });
+  
+          if (user) {
+            console.log(user);
+            res.json(user);
+          } else {
+            res.status(404).json({ error: 'User not found' });
+          }
+        } catch (error) {
+          console.error('Error fetching user:', error);
+          res.status(500).json({ error: 'Error fetching user' });
+        }
+  
+      
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+      res.status(500).json({ error: 'Error checking authentication' });
+    }
+  });
 /**
  * SpotifyWebApi
 */
