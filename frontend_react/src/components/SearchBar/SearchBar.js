@@ -8,7 +8,7 @@ const SearchBar = ({ onSearch, onSearchPerformed }) => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`https://diskovery.onrender.com/search/${searchQuery}`);
+      const response = await axios.get(`https://diskovery.onrender.com/search/${searchQuery}`, { withCredentials: true });
       onSearch(response.data); // Pass the search results to the parent component
       onSearchPerformed(); // Invoke the callback to notify home.jsx of the search
     } catch (error) {

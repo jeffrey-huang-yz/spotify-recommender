@@ -34,7 +34,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
   const handleAddToPlaylist = async () => {
   try {
     // Check if the song is already in the playlist
-    const playlistDetailsResponse = await axios.get(`https://diskovery.onrender.com/playlist-details/${selectedPlaylistId}`);
+    const playlistDetailsResponse = await axios.get(`https://diskovery.onrender.com/playlist-details/${selectedPlaylistId}`, { withCredentials: true });
     const playlistTracks = playlistDetailsResponse.data;
     const isSongInPlaylist = playlistTracks.some(items => items.track.id === song.id);
 
