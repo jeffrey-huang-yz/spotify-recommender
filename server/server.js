@@ -320,7 +320,7 @@ accessType: 'offline', approvalPrompt: 'force', keepSessionInfo: true }));
   );
   
   
-  app.get('/googleuser/data', async (req, res) => {
+  app.get('/googleuser/data', passport.authenticate('session'), async (req, res) => {
     try {
 
         const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
