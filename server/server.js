@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const cors = require("cors");
 const MongoStore = require('connect-mongo');
 
-app.use(cors({ origin: '*', credentials: true, allowedHeaders: "Content-Type, Authorization", }));
+app.use(cors({ origin: 'https://diskovery-ljvy.onrender.com/', credentials: true, allowedHeaders: "Content-Type, Authorization", }));
 app.use(session({
   store: new MongoStore({ 
     mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
@@ -23,10 +23,11 @@ app.use(session({
     secure: false,
   }
 }));
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
+
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 app.set('trust proxy', 1) // trust first proxy
 const port = process.env.PORT
 /*
@@ -323,12 +324,11 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
   );
   
   
-  app.get('/auth/google/data'), passport.authenticate('google', { failureRedirect: '/' }), async (req, res, next) => {
+  app.get('/auth/google/data'), async (req, res, next) => {
   
     try {
-      if(req.user){
+      
         console.log(JSON.parse(req.session.passport.userId));
-      }
       
         // Check if user is authenticated
         
@@ -353,6 +353,9 @@ accessType: 'offline', approvalPrompt: 'force' }), (req, res, next) => {
         return res.status(500).json({ error: 'Error checking authentication' });
     }
   };
+
+
+  
 /**
  * SpotifyWebApi
 */
