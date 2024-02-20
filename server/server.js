@@ -330,7 +330,7 @@ accessType: 'offline', approvalPrompt: 'force' }));
 
         // Find user in the database
         try {
-            const foundUser = await User.findOne({ userId: userId });
+            const foundUser = await User.findOne({ userId });
 
             if (foundUser) {
                 return res.json(foundUser);
