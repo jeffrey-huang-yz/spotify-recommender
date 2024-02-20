@@ -324,11 +324,11 @@ accessType: 'offline', approvalPrompt: 'force' }));
   
   app.get('/googleuser/data', async (req, res) => {
     try {
-      res.redirect(`https://diskovery-ljvy.onrender.com/home/?userId=${req.user.userId}&email=${req.user.email}`);
+    
       const sessionData = req.session;
       console.log(sessionData);
       console.log(sessionData.passport.user);
-      console.log(req.user.userId);
+      console.log(req);
         // Check if user is authenticated
         
         const userId = sessionData.passport.user.userId;
