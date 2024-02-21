@@ -44,7 +44,7 @@ const Popup = ({
     };
   
     try {
-      const response = await axios.put(`https://diskovery.onrender.com/googleusers/${id}/${buttonId}`, updatedButtonData);
+      const response = await axios.put(`https://diskovery.onrender.com/googleusers/${id}/${buttonId}`,{ withCredentials: true },  updatedButtonData);
   
       if (response.status === 200) {
         console.log('User updated successfully');
