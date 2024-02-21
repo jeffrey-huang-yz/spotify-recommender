@@ -1,10 +1,14 @@
 const express = require('express');
-const session = require('express-session');
+const cookieParser = require('cookie-parser');
+
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./src/User');
 const app = express();
-const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: true}));
+app.set('trust proxy', 1) // trust first proxy
+const session = require('express-session');
 const bodyParser = require('body-parser');
 
 const cors = require("cors");
@@ -26,12 +30,11 @@ app.use(session({
 
   }
 }));
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
+
 app.use(passport.initialize());
 app.use(passport.authenticate('session'));
 
-app.set('trust proxy', 1) // trust first proxy
+
 const port = process.env.PORT
 
 
