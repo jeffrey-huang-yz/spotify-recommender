@@ -1,10 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Slider, { Range } from 'rc-slider';
-import "rc-slider/assets/index.css";
-import './Popup.scss';
-import { IoMdClose } from "react-icons/io";
-
 const Popup = ({
   onClose,
   min,
@@ -18,13 +11,13 @@ const Popup = ({
   const [sliderValues, setSliderValues] = useState([userMin, userMax]);
   const [targetValues, setTargetValue] = useState(targetValue);
   const [userId, setUserId] = useState(id);
+  const [forceUpdateFlag, setForceUpdateFlag] = useState(false); // New state variable
 
   useEffect(() => {
     setSliderValues([userMin, userMax]);
     setTargetValue(targetValue);
     setUserId(id);
 
-    
   }, [userMin, userMax, targetValue, id]);
 
   const handleSliderChange = (newUserMin, newUserMax) => {
@@ -44,13 +37,13 @@ const Popup = ({
     };
   
     try {
-      const response = await axios.put(`https://diskovery.onrender.com/googleusers/${id}/${buttonId}`,{ withCredentials: true },  updatedButtonData);
+      const response = await axios.put(`https://diskovery.onrender.com/googleusers/${id}/${buttonId}`, updatedButtonData, { withCredentials: true });
   
       if (response.status === 200) {
         console.log('User updated successfully');
         setSliderValues([sliderValues[0], sliderValues[1]]);
         setTargetValue(targetValues);
-        this.forceUpdate();
+        setForceUpdateFlag(prev => !prev); // Toggle the flag to trigger re-render
       } else {
         console.error('Error updating user:', response.data.error);
       }
@@ -64,7 +57,7 @@ const Popup = ({
       <div className="popup-content">
         <div className="popup-header">
           <h2>{buttonId}</h2>
-        <IoMdClose size="30px" onClick={onClose} className='close-button' style={{ marginBottom: '10px' }}/>
+          <IoMdClose size="30px" onClick={onClose} className='close-button' style={{ marginBottom: '10px' }}/>
         </div>
         <div>
           <Slider range
