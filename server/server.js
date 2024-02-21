@@ -284,12 +284,12 @@ passport.use(new GoogleStrategy({
 }));
 
 passport.serializeUser((user, done) => {
-  console.log('Serializing user:', user);
+  console.log('Serializing user:');
   done(null, user); // Assuming userId is unique
 });
 
 passport.deserializeUser((user, done) => {
-    console.log('Deserializing user:', user);
+    console.log('Deserializing user:');
     done(null, user);
 });
 app.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
