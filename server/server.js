@@ -500,7 +500,7 @@ app.get('/recommendations', async (req, res) => {
   const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
   const user = await User.findOne({ userId });
   console.log(user); 
-  try {
+  
     const response = await spotifyApi.getRecommendations({ 
       seed_tracks: seedTracks, 
       min_acousticness: user.buttons[0].userMin, max_acousticness: user.buttons[0].userMax, target_acousticness: user.buttons[0].targetValue,
@@ -523,10 +523,7 @@ app.get('/recommendations', async (req, res) => {
       artist: item.artists.map(artist => artist.name).join(', '),
     }));
     res.json(tracks);
-  } catch (error) {
-    console.error('Error getting recommendations:', error);
-    res.status(500).send('Error getting recommendations');
-  }
+ 
 });
 
 

@@ -15,7 +15,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const [user, setUser] = useState(null);
   const [selectedButton, setSelectedButton] = useState(null);
   const [refreshUserData, setRefreshUserData] = useState(false);
-  const [seedTracks, setSeedTracks] = useState('');
+  const [seedTracks, setSeedTracks] = useState([]);
   const [recommendationResults, setRecommendationResults] = useState([]); 
   const searchRef = useRef(null);
   const recentlyPlayedRef = useRef(null);
@@ -80,7 +80,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   
   useEffect(() => {
     // Update seedTracks whenever selectedSongs changes
-    const newSeedTracks = selectedSongs.map((song) => song.id).join(',');
+    const newSeedTracks = selectedSongs;
     setSeedTracks(newSeedTracks);
   }, [selectedSongs]);
 
@@ -156,10 +156,9 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const handleRecommendation = async () => {
     try {
       console.log('seedTracks:', seedTracks)
-      const response = await axios.get('https://diskovery.onrender.com/recommendations',{ withCredentials: true }, {
+      const response = await axios.get('https://diskovery.onrender.com/recommendations', {
         params: {
           seedTracks: seedTracks,
-          user: user,
         }, 
       });
   
