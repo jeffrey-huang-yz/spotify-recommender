@@ -1,3 +1,10 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Slider, { Range } from 'rc-slider';
+import "rc-slider/assets/index.css";
+import './Popup.scss';
+import { IoMdClose } from "react-icons/io";
+
 const Popup = ({
   onClose,
   min,
