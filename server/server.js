@@ -499,7 +499,6 @@ app.get('/recommendations', async (req, res) => {
   console.log(seedTracks);
   const userId = req.user.userId; // Assuming your User model has a field googleId for user identification
   const user = await User.findOne({ userId });
-  console.log(user); 
   
     const response = await spotifyApi.getRecommendations({ 
       seed_tracks: seedTracks, 
