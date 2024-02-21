@@ -26,11 +26,11 @@ app.use(session({
 
   }
 }));
-
-app.use(passport.initialize());
-app.use(passport.authenticate('session'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.authenticate('session'));
+
 app.set('trust proxy', 1) // trust first proxy
 const port = process.env.PORT
 
