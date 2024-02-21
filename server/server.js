@@ -496,6 +496,7 @@ app.get('/search/:query', async (req, res) => {
 // Recommendations endpoint (simplified, adjust based on your needs)
 app.get('/recommendations', async (req, res) => {
   const { seedTracks, user } = req.query;
+  console.log(user);
   try {
     const response = await spotifyApi.getRecommendations({ 
       seed_tracks: seedTracks, 
