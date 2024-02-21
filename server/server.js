@@ -6,11 +6,10 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./src/User');
 const app = express();
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: true}));
 app.set('trust proxy', 1) // trust first proxy
 const session = require('express-session');
 const bodyParser = require('body-parser');
-
+app.use(bodyParser.urlencoded({extended: true}));
 const cors = require("cors");
 const MongoStore = require('connect-mongo');
 
