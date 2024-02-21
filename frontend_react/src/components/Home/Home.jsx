@@ -80,7 +80,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   
   useEffect(() => {
     // Update seedTracks whenever selectedSongs changes
-    const newSeedTracks = selectedSongs;
+    const newSeedTracks = selectedSongs.map(song => song.id);
     setSeedTracks(newSeedTracks);
   }, [selectedSongs]);
 
