@@ -15,7 +15,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const [user, setUser] = useState(null);
   const [selectedButton, setSelectedButton] = useState(null);
   const [refreshUserData, setRefreshUserData] = useState(false);
-  const [seedTracks, setSeedTracks] = useState([]);
+  const [seedTracks, setSeedTracks] = useState('');
   const [recommendationResults, setRecommendationResults] = useState([]); 
   const searchRef = useRef(null);
   const recentlyPlayedRef = useRef(null);
