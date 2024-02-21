@@ -304,12 +304,19 @@ accessType: 'offline', approvalPrompt: 'force', keepSessionInfo: true }));
   });
   
   app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/', keepSessionInfo: true,}),
-  (req, res) => {
-    // Successful authentication, redirect to the login page
-    req.session.save();
-    res.redirect('https://diskovery-ljvy.onrender.com/login');
-  }
+    passport.authenticate('google', { failureRedirect: '/', keepSessionInfo: true,}),
+    (req, res) => {
+      // Successful authentication, redirect to the login page
+      req.session.save();
+
+      // Set SameSite attribute to None and Secure to true for the session cookie
+      res.cookie('connect.sid', req.sessionID, {
+        sameSite: 'none',
+        secure: true
+      });
+
+      res.redirect('https://diskovery-ljvy.onrender.com/login');
+    }
 );
 
   app.get(
