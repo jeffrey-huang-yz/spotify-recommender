@@ -155,7 +155,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
 
   const handleRecommendation = async () => {
     try {
-      
+      console.log('seedTracks:', seedTracks)
       const response = await axios.get('https://diskovery.onrender.com/recommendations',{ withCredentials: true }, {
         params: {
           seedTracks: seedTracks,
