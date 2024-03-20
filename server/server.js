@@ -479,7 +479,7 @@ app.get('/search/:query', async (req, res) => {
       id: item.id,
       uri:item.uri,
       name: item.name,
-      album: {
+      album: {  
         albumArt: item.album.images[0].url,
       },
       artist: item.artists.map(artist => artist.name).join(', '),
