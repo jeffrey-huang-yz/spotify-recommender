@@ -16,7 +16,7 @@ const MongoStore = require('connect-mongo');
 app.use(cors({ origin: 'https://diskovery-ljvy.onrender.com', credentials: true, allowedHeaders: "Content-Type, Authorization", }));
 app.use(session({
   store: new MongoStore({ 
-    mongoUrl: 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test',
+    mongoUrl: process.env.MONGODB_CONNECT_URI,
   }),
   secret: 'your-secret-key',
   resave: false,
@@ -48,7 +48,7 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const { MongoClient } = require('mongodb');
 
 // Connection URI 
-const uri = 'mongodb+srv://jeffreyhuangyz:rpME9Lpa141kQhx6@cluster0.cq95dau.mongodb.net/test';
+const uri = process.env.MONGODB_CONNECT_URI;
 
 // Create a MongoDB client and connect to the database
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -233,8 +233,8 @@ app.put('/reset-button-values/:userId', async (req, res) => {
 
 
 passport.use(new GoogleStrategy({
-  clientID: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
-  clientSecret: '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',
+  clientID: process.env.clientID,
+  clientSecret: process.env.clientSecret,
   callbackURL: 'https://diskovery.onrender.com/auth/google/callback', 
   accessType: 'offline',
   approvalPrompt: 'force',
@@ -300,8 +300,8 @@ accessType: 'offline', approvalPrompt: 'force', keepSessionInfo: true }));
   const google = require('googleapis').google;
   
   const oAuth2Client = new OAuth2Client({
-    clientId: '534940976970-h7dht45d0hn77qust80g79e7aavfplnj.apps.googleusercontent.com',
-    clientSecret: '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',
+    clientId: process.env.clientID,
+    clientSecret: process.env.clientSecret,
     redirectUri: 'https://diskovery.onrender.com/auth/google/callback',
   });
   
@@ -362,8 +362,8 @@ accessType: 'offline', approvalPrompt: 'force', keepSessionInfo: true }));
 */
 
 const spotifyApi = new SpotifyWebApi({
-  clientId: 'fb7620c28e204226b196176a4f268215',
-  clientSecret: '6b3a14d1ce9241e49805762910f8c0fd',
+  clientId: process.env.spotifyID,
+  clientSecret: process.env.spotifySecret,
   redirectUri: 'https://diskovery-ljvy.onrender.com/callback',
 });
 
