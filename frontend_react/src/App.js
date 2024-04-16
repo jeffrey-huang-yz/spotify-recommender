@@ -4,7 +4,7 @@ import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 import Callback from './components/Callback/Callback'; 
 import SearchResults from './components/SearchResults';
-import GoogleAuth from './components/GoogleAuth';
+import GoogleAuth from './components/GoogleAuth/GoogleAuth';
 
 const App = () => {
   return (

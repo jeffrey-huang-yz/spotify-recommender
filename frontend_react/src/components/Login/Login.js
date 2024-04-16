@@ -37,14 +37,27 @@ const Login = () => {
 
   return (
     <div>
+      
+      <div id="signals">
+        <span class="signal s1"></span>
+        <span class="signal s2"></span>
+        <span class="signal s3"></span>
+        <span class="signal s4"></span>
+      </div>
       <h1 className='title'>
         <span className="purple-text">disk</span>overy
       </h1>
-      <a href="https://diskovery.onrender.com/login" className="spotify-button">Log in with Spotify</a>
       <p>
       Welcome to diskovery! This website helps you discover new music based on your specific preferences. <br></br>Log in with your <span className='green-text'> Spotify account</span> to get started so you can add music to playlists in real time.
       </p>
+      <a href="https://diskovery.onrender.com/login" className="spotify-button">Log in with Spotify</a>
+      
+
+
     </div>
+
+  
+  
     );
   }
   

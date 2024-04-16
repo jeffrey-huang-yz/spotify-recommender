@@ -266,36 +266,35 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
       )}
       </div>
       
-      {/* Recommendated Tracks Section */}
-      <div className="song-cards-container " ref={recommendationRef}>
-        <div className='recently-played'>
-          <h2>Recommended Tracks:</h2>
-
-          <div className='songcards'>
-          {recommendationResults.map((track, index) => (
-            <SongCard
-            key={index}
-            song={track}
-            selectedPlaylistId={selectedPlaylistId}
-            selectedPlaylistName={selectedPlaylistName}
-            onSongSelect={handleSongSelect}
-            isSelected={selectedSongs.some((selectedSong) => selectedSong.id === track.id)}
-            />
-          ))}
+      {recommendationResults.length > 0 && (
+        <div className="song-cards-container" ref={recommendationRef}>
+          <div className='recently-played'>
+            <h2>Recommended Tracks:</h2>
+            <div className='songcards'>
+              {recommendationResults.map((track, index) => (
+                <SongCard
+                  key={index}
+                  song={track}
+                  selectedPlaylistId={selectedPlaylistId}
+                  selectedPlaylistName={selectedPlaylistName}
+                  onSongSelect={handleSongSelect}
+                  isSelected={selectedSongs.some((selectedSong) => selectedSong.id === track.id)}
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       
+      {searchResults.length > 0 && (
       <div className='song-cards-container' ref={searchRef}>
         {/* Display search results if available */}
         <div className="search-results">
           <h2>Search Results:</h2>
-        {searchResults.length > 0 && (
-    
-            <div className='songcards'>
-              {searchResults.map((track, index) => (
-                <SongCard
+          <div className='songcards'>
+            {searchResults.map((track, index) => (
+              <SongCard
                 key={index}
                 song={track}
                 selectedPlaylistId={selectedPlaylistId}
@@ -303,12 +302,11 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
                 onSongSelect={handleSongSelect}
                 isSelected={selectedSongs.some((selectedSong) => selectedSong.id === track.id)}
               />
-              ))}
-            </div>
-          
-        )}
+            ))}
+          </div>
         </div>
       </div>
+      )}
 
       {/* Recently Played Tracks Section */}
       <div className="song-cards-container " ref={recentlyPlayedRef}>
