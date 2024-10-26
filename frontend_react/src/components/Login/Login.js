@@ -48,7 +48,8 @@ const Login = () => {
         <span className="purple-text">disk</span>overy
       </h1>
       <p>
-      Welcome to diskovery! This website helps you discover new music based on your specific preferences. <br></br>Log in with your <span className='green-text'> Spotify account</span> to get started so you can add music to playlists in real time.
+      Welcome to diskovery! This website helps you discover new music based on your specific preferences. 
+      <br></br>Step 2: Log in with your <span className='green-text'> Spotify account</span> to get started so you can add spotify music you find to your playlists.
       </p>
       <a href="https://diskovery.onrender.com/login" className="spotify-button">Log in with Spotify</a>
       

@@ -23,7 +23,8 @@ const GoogleAuth = () => {
         <span className="purple-text">disk</span>overy
       </h1>
       <p>
-      Welcome to diskovery! This website helps you discover new music based on your specific preferences. <br></br>Log in with your <span className='green-text'> Spotify account</span> to get started so you can add music to playlists in real time.
+      Welcome to diskovery! This website helps you discover new music based on your specific preferences. 
+      <br></br>Step 1: Log in with your Google account so we can start saving your preferences.
       </p>
       <div className="google-sign-in-button" onClick={handleLogin}>
         <img

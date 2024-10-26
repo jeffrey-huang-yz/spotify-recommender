@@ -24,6 +24,7 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   const searchbarRef = useRef(null);
   const logoutTimeoutRef = useRef(null); 
   const [userImage, setUserImage] = useState();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   axios.defaults.withCredentials = true;
   useEffect(() => {
     const fetchData = async () => {
@@ -186,19 +187,20 @@ function Home({ selectedPlaylistId, selectedPlaylistName, onSearch }) {
   return (
     <div className='noselect'>
 
-      <nav className="navbar">
-        <ul>
-          <li onClick={() => scrollToRef(searchbarRef)}>Search Bar</li>
-          <li onClick={() => scrollToRef(selectedSongsRef)}>Selected Songs</li>
-          <li onClick={() => scrollToRef(recommendationRef)}>Recommended Tracks</li>
-          <li onClick={() => scrollToRef(searchRef)}>Search Results</li>
-          <li onClick={() => scrollToRef(recentlyPlayedRef)}>Recently Played Tracks</li>
-          
-        </ul>
-      </nav>
 
-      <div className='user-profile'>
+      <div className='user-profile' onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
         <img src={userImage} alt='Spotify Icon' className='spotify-icon' />
+        {isDropdownOpen && (
+          <nav className="dropdown-menu">
+            <ul>
+              <li onClick={() => { scrollToRef(searchbarRef); setIsDropdownOpen(false); }}>Search Bar</li>
+              <li onClick={() => { scrollToRef(selectedSongsRef); setIsDropdownOpen(false); }}>Selected Songs</li>
+              <li onClick={() => { scrollToRef(recommendationRef); setIsDropdownOpen(false); }}>Recommended Tracks</li>
+              <li onClick={() => { scrollToRef(searchRef); setIsDropdownOpen(false); }}>Search Results</li>
+              <li onClick={() => { scrollToRef(recentlyPlayedRef); setIsDropdownOpen(false); }}>Recently Played Tracks</li>
+            </ul>
+          </nav>
+        )}
       </div>
       {/* Discovery Section */}
       <div className="home-title" ref={searchbarRef}>

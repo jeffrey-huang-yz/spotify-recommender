@@ -20,7 +20,6 @@ body {
 .purple-text {
     color: #b702ff; // Set the text color to purple
     margin-bottom: 20px;
-    animation: floating 3s ease-in-out infinite; // Add floating animation
     margin-top: 2rem;
 }
 
@@ -56,7 +55,6 @@ body {
     &:hover {
         background-color: rgba(0, 255, 0, 0.65); // Darker green on hover
         color: white;
-        transform: scale(1.1); // Grow the button on hover
    
         
     }

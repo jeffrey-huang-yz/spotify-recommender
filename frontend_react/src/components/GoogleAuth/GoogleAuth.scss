@@ -20,7 +20,6 @@ body {
 .purple-text {
     color: #b702ff; // Set the text color to purple
     margin-bottom: 20px;
-    animation: floating 3s ease-in-out infinite; // Add floating animation
     margin-top: 2rem;
 }
 
@@ -53,9 +52,6 @@ body {
     display: flex;
     max-width: 300px; // Set a maximum width for the button
     margin: 0 auto; // Center the button horizontally
-    &:hover {
-        transform: scale(1.33); // Grow the button on hover
-    }
 }
 
 @media screen and (max-width: 768px) {
