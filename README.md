@@ -18,7 +18,10 @@ A Google account and a Spotify account is required.
 5. The search bar can also be used to search for a specific song or artist. ![image](https://github.com/user-attachments/assets/6a9d3ab7-ed17-4bf5-af48-e2ba2760f35c)
 6. Click on the attribute buttons and adjust the min, max, and target values as desired. ![image](https://github.com/user-attachments/assets/796cc6c0-b3bb-4572-8abb-5c151857c903)
 7. Click on the "Search For Recommended Songs" buttons and view the results. ![image](https://github.com/user-attachments/assets/d4d33f6a-e80e-4076-ad14-eb63f00fcfbd)
-8. Select "Play" on a song with Spotify open to begin listening to the song. ![image](https://github.com/user-attachments/assets/2312ac02-ede0-45b4-83ae-708d0cb14f87)
+8. Select "Play" on a song with Spotify open to begin listening to the song, and click "Add to Playlist" if you like it and want to add it to the current playlist! 
+
+https://github.com/user-attachments/assets/7d99df4b-0855-41b8-9ff6-cb5a0f1634e5
+
 
 
 
