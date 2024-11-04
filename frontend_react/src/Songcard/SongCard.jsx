@@ -38,7 +38,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
     const playlistDetailsResponse = await axios.get(`https://diskovery.onrender.com/playlist-details/${selectedPlaylistId}`, { withCredentials: true });
     const playlistTracks = playlistDetailsResponse.data;
     console.log(playlistTracks);
-    const isSongInPlaylist = playlistTracks.some(item => item.track.id === song.id);
+    const isSongInPlaylist = playlistTracks.some(item => item.track.uri === song.uri);
 
 
 
