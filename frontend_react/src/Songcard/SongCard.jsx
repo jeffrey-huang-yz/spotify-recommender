@@ -38,16 +38,16 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
     const playlistDetailsResponse = await axios.get(`https://diskovery.onrender.com/playlist-details/${selectedPlaylistId}`, { withCredentials: true });
     const playlistTracks = playlistDetailsResponse.data;
     console.log(playlistTracks);
-    const isSongInPlaylist = playlistTracks.some(item => item.track.uri === song.uri);
+    //const isSongInPlaylist = playlistTracks.some(item => item.track.uri === song.uri);
 
 
 
-    if (isSongInPlaylist) {
-      showNotification(`This song is already in ${selectedPlaylistName}`, 3000);  
+    //if (isSongInPlaylist) {
+      //showNotification(`This song is already in ${selectedPlaylistName}`, 3000);  
       // Handle the case where the song is already in the playlist
-      console.log(`Song ${song.name} is already in the playlist`);
+      //console.log(`Song ${song.name} is already in the playlist`);
       // You can show a notification or handle it in any way you prefer
-    } else {
+    //} else {
       
         const response = await axios.post('https://diskovery.onrender.com/add-tracks-to-playlist', {
           playlist_id: selectedPlaylistId,
@@ -61,7 +61,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
         console.log(response.data);
         showNotification(`${song.name} was added to: ${selectedPlaylistName}`, 3000);  
     
-    }
+    //}
   } catch (error) {
     console.error('Error adding tracks to playlist:', error);
     
