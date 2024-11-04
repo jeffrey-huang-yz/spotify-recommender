@@ -25,7 +25,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
         showNotification(`Now playing ${song.name} by ${song.artist}`, 3000);
       } else {
         showNotification(`No active device detected, please play spotify on a device. `, 3000);  
-        console.error('Error starting playback:', data.error);
+        console.error('Error starting playback:', data.error);  
       }
     } catch (error) {
       console.error('Error starting playback:', error);
@@ -37,7 +37,8 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
     console.log(song);
     const playlistDetailsResponse = await axios.get(`https://diskovery.onrender.com/playlist-details/${selectedPlaylistId}`, { withCredentials: true });
     const playlistTracks = playlistDetailsResponse.data;
-    const isSongInPlaylist = playlistTracks.some(items => items.track.id === song.id);
+    const isSongInPlaylist = playlistTracks.some(item => item.track.id === song.id);
+
 
 
     if (isSongInPlaylist) {
@@ -62,7 +63,7 @@ const SongCard = ({ song, selectedPlaylistId, selectedPlaylistName, onSongSelect
     }
   } catch (error) {
     console.error('Error adding tracks to playlist:', error);
-    // You can show an error notification or handle it in any way you prefer
+    
   }
 };
 
